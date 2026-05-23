@@ -31,6 +31,19 @@
 - [ ] Push GitHub + link Vercel deploy
 **Acceptance**: localhost:3000 + Vercel URL show dark theme blank page
 
+### Slice 1.1.5: Layout Shell (Header + Logo + Footer) ⬜
+- [ ] `components/layout/logo.tsx` (text wordmark: "mood" bold + "flix" thin, clickable → /)
+- [ ] `components/layout/header.tsx` (sticky top: logo trái + "Trending" nav + "Sign in" placeholder button)
+- [ ] `components/layout/footer.tsx` (logo nhỏ + tagline + TMDB attribution + logo TMDB)
+- [ ] Wire header + footer vào app/layout.tsx
+- [ ] Mobile responsive (hamburger nếu cần cho nav)
+**Acceptance**:
+- Logo đúng style (mood bold trắng + flix thin xám), click → /
+- Header sticky top, không vỡ mobile
+- "Sign in" là placeholder (chưa work — wire Week 3)
+- Footer có TMDB attribution text + logo (BẮT BUỘC theo TMDB terms)
+- Mọi page tự động có header + footer
+
 ### Slice 1.2: TMDB Client Foundation ⬜
 - [ ] `lib/tmdb/client.ts` (server-only fetch wrapper, typed)
 - [ ] `lib/tmdb/types.ts` (Movie, MovieDetail, TMDBResponse)
@@ -68,19 +81,22 @@
 
 ### Slice 1.7: Discover Page ⬜
 - [ ] Route app/discover/[mood]/page.tsx
+- [ ] Breadcrumb tĩnh: Home > [Mood Label]
 - [ ] Hero: mood emoji + label + description + accent
 - [ ] MovieGrid render mood results
 - [ ] "Show more" pagination
 - [ ] Empty state
 - [ ] Invalid mood → 404
-**Acceptance**: Click mood từ landing → 20 phim relevant, show more work
+**Acceptance**: Click mood từ landing → 20 phim relevant, show more work, breadcrumb hiển thị đúng mood
 
 ### Slice 1.8: Movie Detail Hero ⬜
 - [ ] Route app/movie/[slug]/page.tsx
 - [ ] Slug parser (extract imdb_id từ slug)
+- [ ] Breadcrumb tĩnh: Home > [Title] (bỏ segment "Movies")
+- [ ] Back button (router.back() + fallback /)
 - [ ] `components/movie/movie-hero.tsx` (backdrop + poster + meta)
 - [ ] Loading + error/404 states
-**Acceptance**: Click phim từ discover → detail hero với backdrop/poster/title/rating
+**Acceptance**: Click phim từ discover → detail hero với backdrop/poster/title/rating, breadcrumb + back button work
 
 ### Slice 1.9: Movie Detail Sections ⬜
 - [ ] Overview/synopsis section
@@ -115,7 +131,7 @@
 ### SEO Slices
 - [ ] Slice 2.3: Metadata API mọi route
 - [ ] Slice 2.4: Sitemap động + robots.txt
-- [ ] Slice 2.5: JSON-LD Movie schema
+- [ ] Slice 2.5: JSON-LD Movie schema + BreadcrumbList schema
 - [ ] Slice 2.6: Open Graph + opengraph-image
 - [ ] Slice 2.7: Performance audit (Lighthouse LCP < 2.5s)
 - [ ] Slice 2.8: Submit Google Search Console + Vercel Analytics
@@ -159,3 +175,6 @@ Decision quan trọng giữa slices → ghi ADR vào docs/ARCHITECTURE.md.
 - Working name: Moodflix (deploy moodflix.vercel.app)
 - MVP = movie only, no TV
 - Filter V1 = 5 basic filters
+- Header: sticky top, nav chỉ "Trending", "Sign in" = placeholder đến Week 3
+- TMDB attribution BẮT BUỘC ở footer (terms requirement)
+- Breadcrumb: hybrid (back button + breadcrumb tĩnh theo URL). Ở Discover/Movie/Trending, KHÔNG landing. Movie detail = "Home > Title". BreadcrumbList JSON-LD ở Week 2.

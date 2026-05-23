@@ -176,6 +176,25 @@ KHÔNG dùng image/SVG logo trong MVP.
 - mb-6
 ```
 
+### Breadcrumb + Back Button
+```
+Breadcrumb (tĩnh, theo URL hierarchy):
+- text-sm, text-muted
+- Separator: "/" hoặc chevron nhỏ (text-subtle)
+- Last item (current page): text-text (không link)
+- Discover: Home > [Mood Label]
+- Movie detail: Home > [Title]   (bỏ segment "Movies")
+- Trending: Home > Trending
+- KHÔNG ở landing page
+- Subtle, KHÔNG nổi bật hơn content
+
+Back button:
+- "← Back", text-muted hover:text-text
+- router.back() với fallback về /
+- Đặt trên content area, trước hero
+- Trên movie detail: back button + breadcrumb cùng hàng (back trái, breadcrumb dưới hoặc cạnh)
+```
+
 ### Button
 ```
 - Primary: bg-text text-bg (high contrast, white button đen chữ)

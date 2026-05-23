@@ -58,3 +58,34 @@ export interface TMDBResponse<T> {
   total_pages: number
   total_results: number
 }
+
+export interface VideoResult {
+  id: string
+  key: string
+  name: string
+  site: string
+  type: string
+  official: boolean
+}
+
+export interface VideosResponse {
+  id: number
+  results: VideoResult[]
+}
+
+export interface WatchProvider {
+  provider_id: number
+  provider_name: string
+  logo_path: string
+}
+
+export interface WatchProvidersRegion {
+  flatrate?: WatchProvider[]
+  buy?: WatchProvider[]
+  rent?: WatchProvider[]
+}
+
+export interface WatchProvidersResponse {
+  id: number
+  results: Partial<Record<string, WatchProvidersRegion>>
+}
