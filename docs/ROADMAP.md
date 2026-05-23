@@ -72,12 +72,19 @@
 - [ ] Test trong temp page
 **Acceptance**: 10 moods fetch results khác nhau, có variety giữa các lần gọi
 
-### Slice 1.6: MoodPicker UI ⬜
-- [ ] `components/mood/mood-chip.tsx` (emoji + label + accent)
+### Slice 1.6: Hero Banner + MoodPicker ⬜
+- [ ] `components/mood/mood-chip.tsx` (emoji + label + accent, `bg-surface/80` trong hero)
 - [ ] `components/mood/mood-picker.tsx` (grid 10 chips)
-- [ ] Place trên landing (above trending)
-- [ ] Click chip → navigate /discover/[mood]
-**Acceptance**: Landing có mood grid, click → URL change đúng mood
+- [ ] `components/layout/hero-banner.tsx` (backdrop + overlay + H1 + subtitle + MoodPicker)
+- [ ] Hero backdrop: random từ trending movies (1 fetch server-side, KHÔNG carousel)
+- [ ] Dark overlay: `bg-black/70` + gradient fade từ bottom lên
+- [ ] Height: `70-80vh` desktop / `60vh` mobile
+- [ ] MoodPicker đặt ngay trong hero, dưới H1
+- [ ] Click chip → navigate `/discover/[mood]`
+**Acceptance**:
+- Landing hero có backdrop phim trending, H1 readable trên mọi backdrop
+- 10 mood chips render trong hero, click → URL change đúng
+- KHÔNG blocking modal, KHÔNG carousel, KHÔNG CLS
 
 ### Slice 1.7: Discover Page ⬜
 - [ ] Route app/discover/[mood]/page.tsx

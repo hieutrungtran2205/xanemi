@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { getTrending } from "@/lib/tmdb/endpoints";
 import { MovieGrid, MovieGridSkeleton } from "@/components/movie/movie-grid";
-import { MoodPicker } from "@/components/mood/mood-picker";
+import { HeroBanner } from "@/components/layout/hero-banner";
 
 async function TrendingSection() {
   const data = await getTrending();
@@ -11,23 +11,21 @@ async function TrendingSection() {
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        {/* Mood picker */}
-        <section className="py-16 sm:py-20">
-          <h1 className="mb-2 font-heading text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            What&apos;s your mood?
-          </h1>
-          <p className="mb-10 text-base text-muted-foreground">
-            Pick a feeling. We&apos;ll find the film.
-          </p>
-          <MoodPicker />
-        </section>
+      <HeroBanner />
 
-        {/* Trending */}
-        <section className="pb-20">
-          <h2 className="mb-6 font-heading text-xl font-semibold tracking-tight text-foreground">
-            Trending
-          </h2>
+      <div className="mx-auto max-w-7xl px-4 sm:px-8">
+        <section className="py-16 sm:py-20">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-heading text-xl font-semibold tracking-tight text-foreground">
+              Trending
+            </h2>
+            <a
+              href="/trending"
+              className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            >
+              Show more →
+            </a>
+          </div>
           <Suspense fallback={<MovieGridSkeleton count={10} />}>
             <TrendingSection />
           </Suspense>

@@ -161,6 +161,21 @@ KHÔNG dùng image/SVG logo trong MVP.
 - rounded-md, p-4
 ```
 
+### Hero Banner (Landing)
+```
+- Backdrop: 1 ảnh từ trending movies, random pick server-side — KHÔNG carousel,
+  KHÔNG auto-rotate (tránh CLS)
+- Overlay: `bg-black/70` + gradient `from-black/90 via-black/60 to-transparent`
+  từ bottom lên → text readable trên mọi backdrop
+- Height: `70-80vh` desktop / `60vh` mobile — chừa hint trending cuộn xuống
+- H1 "What's your mood tonight?": Space Grotesk, `text-3xl`, font-weight 700, white
+- Subtitle: Inter, `text-muted`, `text-base`, ngay dưới H1
+- MoodPicker (10 chips) đặt ngay trong hero, dưới H1 + subtitle
+- Mood chips trên nền tối: `bg-surface/80` (backdrop thấy nhẹ phía sau),
+  accent khi hover/active
+- KHÔNG animation backdrop, KHÔNG glassmorphism overlay
+```
+
 ### MovieHero (detail page)
 ```
 - Backdrop full-width, height ~60vh

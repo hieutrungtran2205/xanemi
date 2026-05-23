@@ -131,6 +131,15 @@ External:
 **Why**: Minimal = ít rủi ro "AI-generated look" (chỗ vibe coding yếu nhất). Content (poster) tỏa sáng. Nhanh, $0, vẫn có cá tính qua mood accent + typography. Hợp mục tiêu học (không sa đà design).
 **Trade-off**: Ít differentiation visual so với design cá tính mạnh; cần user actively review output design vì Claude Code không tự biết khi nào làm xấu.
 
+### ADR-014: No blocking modal — Hero MoodPicker + Mood of the Day
+**Context**: Thiết kế ban đầu có modal chọn mood khi vào landing. Phát hiện 2 vấn đề: (1) Google interstitial penalty — modal che content khi tải trang bị coi là intrusive interstitial, ảnh hưởng SEO ranking; (2) First-load friction — user phải dismiss modal trước khi thấy bất kỳ content nào.
+**Decision**: Bỏ blocking modal. Thay bằng hero banner full-width với MoodPicker nhúng trực tiếp. Thêm "Mood of the Day" — highlight 1 mood chip dựa trên giờ trong ngày (static render server-side). Backdrop hero là 1 ảnh trending random — KHÔNG carousel, KHÔNG auto-rotate để tránh CLS.
+**Consequences**:
+- SEO safe: không interstitial penalty, không CLS từ carousel
+- Reduced friction: mood picker visible ngay khi load, không cần dismiss
+- Mood of the Day là static suggestion (không personalized), đủ để guide user mới
+- Tốn thêm 1 TMDB fetch server-side cho backdrop (cache 1h, cost thấp)
+
 ## Data Model (implement Week 3)
 
 Movie-only, không có `mediaType` field.

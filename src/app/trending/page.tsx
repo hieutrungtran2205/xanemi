@@ -14,7 +14,7 @@ async function Grid({ timeWindow }: { timeWindow: "day" | "week" }) {
 
 export default async function TrendingPage({ searchParams }: PageProps) {
   const { period } = await searchParams;
-  const timeWindow = period === "day" ? "day" : "week";
+  const timeWindow = period === "week" ? "week" : "day";
 
   return (
     <main className="min-h-screen bg-background">
@@ -30,22 +30,22 @@ export default async function TrendingPage({ searchParams }: PageProps) {
               <Link
                 href="/trending"
                 className={`rounded px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
-                  timeWindow === "week"
-                    ? "bg-surface-2 text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                This week
-              </Link>
-              <Link
-                href="/trending?period=day"
-                className={`rounded px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
                   timeWindow === "day"
                     ? "bg-surface-2 text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Today
+              </Link>
+              <Link
+                href="/trending?period=week"
+                className={`rounded px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
+                  timeWindow === "week"
+                    ? "bg-surface-2 text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                This week
               </Link>
             </div>
           </div>

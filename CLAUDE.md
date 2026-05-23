@@ -50,7 +50,7 @@ Project này build theo **feature-by-feature (vertical slices)**, KHÔNG generat
 
 ```
 app/
-  (marketing)/page.tsx       # Landing - mood picker + trending
+  (marketing)/page.tsx       # Landing - hero banner (backdrop trending) + mood picker + trending, no blocking modal
   discover/[mood]/page.tsx   # Mood result list + filters
   movie/[slug]/page.tsx      # Movie detail
   trending/page.tsx          # Hot now
