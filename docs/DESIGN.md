@@ -1,0 +1,219 @@
+# Moodflix — Design System
+
+> Style: **Premium minimal** (Mubi/A24 vibe). Dark-only. Content (poster) là ngôi sao, UI lùi về sau. Mood accent dùng tiết chế.
+
+## Design Philosophy
+
+1. **Content first**: poster/backdrop nổi bật, UI chrome tối thiểu.
+2. **Breathing room**: spacing rộng rãi, không chật chội.
+3. **Typography-led**: chữ làm chủ đạo, không decoration thừa.
+4. **Restraint**: ít màu, ít effect. Khi phân vân → bớt đi, không thêm vào.
+5. **Mood accent = gia vị**: màu mood chỉ điểm xuyết, không phải món chính.
+
+## Reference Sites
+- **Letterboxd**: layout grid, detail page structure, dark balance
+- **Mubi**: premium minimal, typography, generous spacing
+
+Khi build component, tham khảo vibe 2 site này.
+
+## Color Tokens
+
+### Base (dùng 90% thời gian)
+```
+--bg:            #0A0A0B   /* near-black, page background */
+--surface:       #141416   /* cards, elevated elements */
+--surface-2:     #1C1C1F   /* hover, secondary surface */
+--border:        #2A2A2E   /* subtle borders */
+--text:          #FAFAFA   /* primary text */
+--text-muted:    #A1A1AA   /* secondary text, meta */
+--text-subtle:   #71717A   /* tertiary, disabled */
+```
+
+### Mood Accents (dùng TIẾT CHẾ — xem rules dưới)
+```
+cozy          #F59E0B   amber
+mind-bending  #06B6D4   cyan
+edge-of-seat  #EF4444   red
+laugh         #FACC15   yellow
+good-cry      #EC4899   pink
+escape        #A855F7   purple
+date-night    #F43F5E   rose
+adrenaline    #F97316   orange
+dark-gritty   #991B1B   deep red
+curious       #10B981   green
+```
+
+### Accent dùng Ở ĐÂU (chỉ 3 chỗ)
+1. Mood chip hover/active state
+2. Discover page header (1 đường line/subtle glow theo mood)
+3. Focus ring (keyboard navigation)
+
+### Accent KHÔNG dùng ở
+- Background toàn trang (giữ near-black)
+- Body text
+- Mọi button khác ngoài mood
+- Borders chung
+
+### Semantic
+```
+--rating-gold:   #FACC15   /* star rating */
+--success:       #22C55E
+--error:         #EF4444
+```
+
+## Typography
+
+### Fonts (next/font/google)
+- **Heading**: Space Grotesk
+- **Body**: Inter
+
+### Scale
+```
+--text-xs:    0.75rem   /* 12px - meta, labels */
+--text-sm:    0.875rem  /* 14px - secondary */
+--text-base:  1rem      /* 16px - body */
+--text-lg:    1.125rem  /* 18px - emphasized body */
+--text-xl:    1.5rem    /* 24px - section heading */
+--text-2xl:   2rem      /* 32px - page heading */
+--text-3xl:   3rem      /* 48px - hero / landing H1 */
+```
+
+### Rules
+- Heading: Space Grotesk, font-weight 600-700, letter-spacing tight (-0.02em)
+- Body: Inter, font-weight 400, line-height 1.6
+- Movie title trên card: font-weight 600, truncate 1 line
+- Meta (year, rating): text-muted, text-sm
+
+## Spacing
+
+Generous. Dùng Tailwind scale, ưu tiên rộng:
+```
+Section gap:        py-16 / py-20 (mobile py-12)
+Card grid gap:      gap-4 / gap-6
+Inside card:        p-3 / p-4
+Page padding:       px-4 (mobile) / px-8 (desktop) / max-w-7xl mx-auto
+Element spacing:    space-y-4 / space-y-6
+```
+
+## Border Radius
+
+Mix có chủ đích, KHÔNG rounded-full mọi thứ:
+```
+Cards/posters:    rounded-lg (8px)
+Buttons:          rounded-md (6px)
+Chips/tags:       rounded-md (6px)
+Inputs:           rounded-md
+Avatar:           rounded-full (chỉ avatar)
+```
+
+## Shadows & Effects
+
+Tiết chế. KHÔNG stack effects:
+```
+Card hover:       1 trong { nhẹ scale-[1.02] } HOẶC { shadow-lg } — KHÔNG cả 2
+Elevated:         shadow-md (modals, dropdowns)
+```
+
+KHÔNG dùng:
+- glow / box-shadow màu
+- backdrop-blur / glassmorphism
+- multiple shadows stack
+
+## Animation
+
+Subtle, fast:
+```
+Transition:       transition-colors / transition-transform, duration-200
+Hover:            ease-out
+Page/fade in:     opacity fade, duration-300
+```
+
+KHÔNG: bounce, spring, scale lớn, rotate playful.
+
+## Logo
+
+Text wordmark, CSS thuần:
+```
+"moodflix" — Space Grotesk
+- "mood" : font-weight 700
+- "flix" : font-weight 300, text-muted
+- letter-spacing: -0.02em
+- lowercase
+```
+KHÔNG dùng image/SVG logo trong MVP.
+
+## Component Patterns
+
+### MovieCard
+```
+- Poster: aspect-[2/3], rounded-lg, object-cover
+- Bottom meta: title (1 line truncate) + year · ★rating (text-muted, text-sm)
+- Hover: scale-[1.02] HOẶC ring nhẹ — pick 1, không cả 2
+- Loading: skeleton với surface-2 pulse
+```
+
+### MoodChip
+```
+- Layout: emoji (lớn) + label (text-base, 600) + subtitle (text-sm, muted)
+- Idle: bg-surface, border-border
+- Hover: bg-surface-2, border chuyển mood accent (subtle)
+- Active: border mood accent rõ + accent text
+- rounded-md, p-4
+```
+
+### MovieHero (detail page)
+```
+- Backdrop full-width, height ~60vh
+- Gradient overlay: from-bg via-bg/60 to-transparent (fade lên trên)
+- Content: poster (trái) + title/meta/actions (phải), align bottom
+- Mobile: poster trên, info dưới (stack)
+```
+
+### Section Heading
+```
+- text-xl/2xl, Space Grotesk 600
+- Optional "see all" link bên phải (text-muted, text-sm)
+- mb-6
+```
+
+### Button
+```
+- Primary: bg-text text-bg (high contrast, white button đen chữ)
+- Secondary: bg-surface border-border text-text
+- Ghost: text-muted hover:text-text
+- rounded-md, px-4 py-2, font-weight 500
+```
+
+## Responsive Breakpoints
+
+```
+Movie grid:   2 cols (mobile) / 3 (sm) / 4 (md) / 5 (lg)
+Mood picker:  2 cols (mobile) / 3 (sm) / 5 (lg)
+Detail hero:  stack (mobile) / side-by-side (md+)
+Filter:       bottom drawer (mobile) / sidebar (lg)
+```
+
+## Anti-Patterns (TRÁNH "AI-generated look")
+
+KHÔNG làm những điều sau:
+- ❌ Gradient nhiều hướng / màu mè (1 subtle dark gradient cho hero overlay OK)
+- ❌ Glassmorphism, backdrop-blur
+- ❌ Hover stack: scale + shadow + glow cùng lúc → pick 1
+- ❌ rounded-full mọi thứ (chỉ avatar)
+- ❌ Emoji ngoài mood context
+- ❌ Copy "stunning/revolutionary/seamless/elevate/unleash"
+- ❌ Neon glow, box-shadow màu
+- ❌ Quá nhiều accent color trên 1 màn hình
+- ❌ Card chật chội, thiếu padding
+- ❌ Center mọi thứ (dùng left-align cho text dài)
+
+## Verify Checklist (review output Claude Code)
+
+Mỗi khi Claude generate UI, check:
+- [ ] Nền vẫn near-black, không gradient lạ?
+- [ ] Spacing đủ rộng (breathing room)?
+- [ ] Chỉ 1 hover effect, không stack?
+- [ ] Mood accent chỉ ở chip/ring/header?
+- [ ] Poster nổi bật, UI lùi sau?
+- [ ] Có giống vibe Letterboxd/Mubi không?
+- [ ] Typography rõ ràng, Space Grotesk heading + Inter body?
