@@ -45,7 +45,8 @@ External:
 - Mood-based discovery (10 moods)
 - Trending movies section
 - Movie detail (synopsis, cast, trailer, watch providers, similar)
-- Filter V1 (genre, year, rating, sort, language)
+- Filter V1 (genre, year, rating, sort, language) — tại `/discover`, không phải mood pages
+- Search by title — global search bar trong header, navigate tới `/discover?q=`
 - Auth (Google OAuth)
 - Watchlist (add/remove)
 - Watched + rating (1-10)
@@ -59,7 +60,6 @@ External:
 - LLM-powered free-form mood input
 - Curated collections
 - Filter Tier 2 (runtime, country, keywords, cast/crew, watch-provider filter)
-- `/browse` page (filter without mood)
 - Quick filter chips
 - i18n (multi-language)
 - Personalized recommendations từ watched history
@@ -116,10 +116,15 @@ External:
 **Why**: Giảm scope, ít edge case (season/episode), ship nhanh hơn ~1-2 ngày.
 **Trade-off**: User không discover TV shows ở MVP.
 
-### ADR-011: Filter V1 = 5 basic filters, refine pattern
-**Decision**: Filter ở `/discover/[mood]`. 5 filters: genre, year, rating, sort, language. Mood = base query, filter = additional constraint (REFINE not REPLACE). URL state via nuqs. Apply button (not live update).
-**Why**: Đủ để lọc phim muốn xem mà không overwhelming. SEO-friendly URLs.
-**Trade-off**: Power-user filters (runtime, cast, keywords) phải đợi V2.
+### ADR-011: Filter tách khỏi mood — `/discover` page riêng
+**Decision**: Filter (genre, year, rating, sort, language) sống tại `/discover`, KHÔNG phải `/discover/[mood]`. Mood pages giữ nguyên: hero + grid + pagination, không filter. Home page có filter panel inline (navigate mode) để user vào thẳng `/discover`. URL state via nuqs. Apply button — không live update.
+**Why**: Filter và mood là 2 entry point độc lập. Mood = curation; filter = power search. Gộp chung làm loãng cả hai.
+**Trade-off**: User muốn filter trong mood context phải ra `/discover` tay.
+
+### ADR-015: Search by title tách biệt filter
+**Decision**: Search (`/search/movie`) và filter (`/discover/movie`) là 2 mode riêng tại `/discover`. Khi có `?q=`, ẩn filter panel và dùng search endpoint. Không cho phép combine.
+**Why**: TMDB API giới hạn cứng — `/search/movie` không nhận genre/rating/sort params; `/discover/movie` không nhận text query. Không thể combine ở server, combine ở client tạo UX giả và kết quả sai.
+**Trade-off**: User không thể vừa search tên vừa filter genre cùng lúc.
 
 ### ADR-012: Feature-sliced development
 **Decision**: Build theo vertical slices 1-4h mỗi cái. Mỗi slice: plan -> code -> review -> test -> commit -> roadmap update.
@@ -165,7 +170,8 @@ MOOD_LOG:  id, userId(nullable), sessionId, mood, resultTmdbIds(jsonb), clickedT
 | Movie detail | 24h | `movie-{id}` |
 | Discover (mood) | 1h | `mood-{moodId}` |
 | Trending | 1h | `trending` |
-| Search | 5 min | none |
+| Search (`/search/movie`) | 1h | none |
+| Discover filter (`/discover/movie`) | 1h | `discover` |
 | Videos (trailer) | 24h | `videos-{id}` |
 | Watch providers | 6h | `providers-{id}` |
 | Genre list | 30 days | `genres` |
@@ -174,11 +180,11 @@ MOOD_LOG:  id, userId(nullable), sessionId, mood, resultTmdbIds(jsonb), clickedT
 ## Route Structure
 
 ```
-/                          Landing (mood picker + trending)
-/discover/[mood]           Mood result + filters
+/                          Landing (mood picker + trending + filter panel → navigate)
+/discover                  Browse/filter page (genre, year, rating, sort, lang) + search by title
+/discover/[mood]           Mood result (hero + grid + pagination, no filter)
 /movie/[slug]              Movie detail
 /trending                  Hot now
-/search?q=                 Search (Week 2+)
 /(user)/watchlist          Private
 /(user)/watched            Private
 /login                     Auth

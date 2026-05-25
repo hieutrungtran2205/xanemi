@@ -8,7 +8,7 @@ async function TrendingSection() {
   return <MovieGrid movies={data.results} priority />;
 }
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <main className="min-h-screen bg-background">
       <HeroBanner />

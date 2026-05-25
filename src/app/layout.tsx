@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
@@ -32,10 +33,12 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <ScrollToTop />
-        <Header />
-        {children}
-        <Footer />
+        <NuqsAdapter>
+          <ScrollToTop />
+          <Header />
+          {children}
+          <Footer />
+        </NuqsAdapter>
       </body>
     </html>
   );
