@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { MOOD_DEFINITIONS } from '@/lib/moods/definitions'
 import { getMoviesByMood } from '@/lib/moods/engine'
 import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { MoodMovieHero, MoodMovieHeroSkeleton } from '@/components/movie/mood-movie-hero'
 import { Pagination } from '@/components/movie/pagination'
 import type { MoodId } from '@/lib/moods/types'
 
@@ -21,32 +22,33 @@ export default async function DiscoverPage({ params, searchParams }: PageProps) 
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Mood hero */}
-      <div className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
-          <div style={{ borderLeftColor: moodDef.accent }} className="border-l-[3px] pl-5">
-            <div className="flex items-center gap-3">
-              <span className="text-4xl leading-none">{moodDef.emoji}</span>
-              <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                {moodDef.label}
-              </h1>
+      {/* Hero + results */}
+      <Suspense
+        key={page}
+        fallback={
+          <>
+            <MoodMovieHeroSkeleton />
+            <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+              <MovieGridSkeleton count={19} />
             </div>
-            <p className="mt-2 text-base text-muted-foreground">{moodDef.description}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Results */}
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
-        <Suspense key={page} fallback={<MovieGridSkeleton count={20} />}>
-          <MoodResults moodId={moodDef.id} page={page} />
-        </Suspense>
-      </div>
+          </>
+        }
+      >
+        <MoodResults moodId={moodDef.id} moodDef={moodDef} page={page} />
+      </Suspense>
     </main>
   )
 }
 
-async function MoodResults({ moodId, page }: { moodId: MoodId; page: number }) {
+async function MoodResults({
+  moodId,
+  moodDef,
+  page,
+}: {
+  moodId: MoodId
+  moodDef: (typeof MOOD_DEFINITIONS)[MoodId]
+  page: number
+}) {
   const data = await getMoviesByMood(moodId, page)
 
   if (data.results.length === 0) {
@@ -57,13 +59,22 @@ async function MoodResults({ moodId, page }: { moodId: MoodId; page: number }) {
     )
   }
 
-  const totalPages = Math.min(data.total_pages, 500)
+  const heroMovie = data.results[0]
+  const restMovies = data.results.slice(1)
+
+  const totalPages = Math.min(data.total_pages, 50)
 
   return (
     <>
-      <MovieGrid movies={data.results} />
-      <Pagination page={page} totalPages={totalPages} />
+      <MoodMovieHero movie={heroMovie} mood={moodDef} />
+
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+        <p className="mb-6 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          More films for this mood
+        </p>
+        <MovieGrid movies={restMovies} />
+        <Pagination page={page} totalPages={totalPages} />
+      </div>
     </>
   )
 }
-
