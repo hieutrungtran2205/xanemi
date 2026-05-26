@@ -1,8 +1,9 @@
-import Link from 'next/link'
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { MOOD_DEFINITIONS } from '@/lib/moods/definitions'
 import { getMoviesByMood } from '@/lib/moods/engine'
-import { MovieGrid } from '@/components/movie/movie-grid'
+import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { Pagination } from '@/components/movie/pagination'
 import type { MoodId } from '@/lib/moods/types'
 
 interface PageProps {
@@ -17,11 +18,6 @@ export default async function DiscoverPage({ params, searchParams }: PageProps) 
 
   const rawParams = await searchParams
   const page = Math.max(1, parseInt((rawParams.page as string) ?? '1', 10) || 1)
-
-  const data = await getMoviesByMood(moodDef.id, page)
-
-  const hasMore = page < Math.min(data.total_pages, 10)
-  const showMoreHref = buildShowMoreHref(moodDef.id, page + 1)
 
   return (
     <main className="min-h-screen bg-background">
@@ -42,31 +38,32 @@ export default async function DiscoverPage({ params, searchParams }: PageProps) 
 
       {/* Results */}
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
-        {data.results.length === 0 ? (
-          <div className="py-24 text-center">
-            <p className="text-muted-foreground">No films found for this mood.</p>
-          </div>
-        ) : (
-          <>
-            <MovieGrid movies={data.results} />
-
-            {hasMore && (
-              <div className="mt-12 flex justify-center">
-                <Link
-                  href={showMoreHref}
-                  className="rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-surface-2"
-                >
-                  Show more
-                </Link>
-              </div>
-            )}
-          </>
-        )}
+        <Suspense key={page} fallback={<MovieGridSkeleton count={20} />}>
+          <MoodResults moodId={moodDef.id} page={page} />
+        </Suspense>
       </div>
     </main>
   )
 }
 
-function buildShowMoreHref(moodId: string, nextPage: number): string {
-  return nextPage > 1 ? `/discover/${moodId}?page=${nextPage}` : `/discover/${moodId}`
+async function MoodResults({ moodId, page }: { moodId: MoodId; page: number }) {
+  const data = await getMoviesByMood(moodId, page)
+
+  if (data.results.length === 0) {
+    return (
+      <div className="py-24 text-center">
+        <p className="text-muted-foreground">No films found for this mood.</p>
+      </div>
+    )
+  }
+
+  const totalPages = Math.min(data.total_pages, 500)
+
+  return (
+    <>
+      <MovieGrid movies={data.results} />
+      <Pagination page={page} totalPages={totalPages} />
+    </>
+  )
 }
+

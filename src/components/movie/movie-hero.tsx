@@ -14,7 +14,7 @@ function formatRuntime(minutes: number | null): string {
 }
 
 export function MovieHero({ movie }: Props) {
-  const backdrop = backdropUrl(movie.backdrop_path, "w1280");
+  const backdrop = backdropUrl(movie.backdrop_path, "original");
   const poster = posterUrl(movie.poster_path, "w500");
   const year = releaseYear(movie.release_date);
   const rating = movie.vote_average.toFixed(1);
@@ -23,7 +23,7 @@ export function MovieHero({ movie }: Props) {
   return (
     <section>
       {/* Backdrop */}
-      <div className="relative h-[50vh] min-h-80 w-full overflow-hidden bg-surface">
+      <div className="relative h-[60vh] min-h-80 w-full overflow-hidden bg-surface">
         {backdrop && (
           <Image
             src={backdrop}
@@ -34,7 +34,7 @@ export function MovieHero({ movie }: Props) {
             priority
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/30 via-35% to-transparent" />
       </div>
 
       {/* Poster + info overlapping the backdrop bottom */}
@@ -42,8 +42,8 @@ export function MovieHero({ movie }: Props) {
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">
             {/* Poster */}
-            <div className="w-32 flex-shrink-0 sm:w-44 md:w-56">
-              <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface shadow-2xl">
+            <div className="w-32 shrink-0 sm:w-44 md:w-56">
+              <div className="relative aspect-2/3 overflow-hidden rounded-lg bg-surface shadow-2xl">
                 {poster ? (
                   <Image
                     src={poster}
@@ -112,12 +112,12 @@ export function MovieHero({ movie }: Props) {
 export function MovieHeroSkeleton() {
   return (
     <section>
-      <div className="h-[50vh] min-h-80 animate-pulse bg-surface" />
+      <div className="h-[60vh] min-h-80 animate-pulse bg-surface" />
       <div className="relative -mt-24 md:-mt-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">
-            <div className="w-32 flex-shrink-0 sm:w-44 md:w-56">
-              <div className="aspect-[2/3] animate-pulse rounded-lg bg-surface-2" />
+            <div className="w-32 shrink-0 sm:w-44 md:w-56">
+              <div className="aspect-2/3 animate-pulse rounded-lg bg-surface-2" />
             </div>
             <div className="flex flex-col gap-3 pb-2 md:pb-10">
               <div className="h-8 w-64 animate-pulse rounded bg-surface-2" />

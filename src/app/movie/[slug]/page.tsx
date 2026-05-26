@@ -45,10 +45,12 @@ export default async function MoviePage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="mx-auto flex max-w-7xl items-center px-4 py-4 sm:px-8">
-        <BackButton />
+      <div className="relative">
+        <div className="absolute left-4 top-4 z-10 sm:left-8 sm:top-6">
+          <BackButton />
+        </div>
+        <MovieHero movie={movie} />
       </div>
-      <MovieHero movie={movie} />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
         {/* Synopsis + Watch Providers row */}
