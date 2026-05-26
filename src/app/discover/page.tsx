@@ -6,6 +6,7 @@ import type { FilterParams } from '@/lib/filters/types'
 import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
 import { FilterPanel } from '@/components/filter/filter-panel'
 import { ActiveFilterChips } from '@/components/filter/active-filter-chips'
+import { Pagination } from '@/components/movie/pagination'
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -42,8 +43,8 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
 
           <div className="min-w-0 flex-1">
             {!q && <ActiveFilterChips genres={genres} />}
-            <Suspense fallback={<MovieGridSkeleton count={20} />}>
-              <MovieResults filters={filters} q={q} page={page} rawParams={rawParams} />
+            <Suspense key={`${q}-${page}-${JSON.stringify(filters)}`} fallback={<MovieGridSkeleton count={20} />}>
+              <MovieResults filters={filters} q={q} page={page} />
             </Suspense>
           </div>
         </div>
@@ -56,16 +57,12 @@ async function MovieResults({
   filters,
   q,
   page,
-  rawParams,
 }: {
   filters: FilterParams
   q: string
   page: number
-  rawParams: Record<string, string | string[] | undefined>
 }) {
   const data = await (q ? searchMovies(q, page) : getDiscoverMovies(filters, page))
-  const hasMore = page < Math.min(data.total_pages, 10)
-  const showMoreHref = buildShowMoreHref(rawParams, page + 1)
 
   if (data.results.length === 0) {
     return (
@@ -83,6 +80,8 @@ async function MovieResults({
     )
   }
 
+  const totalPages = Math.min(data.total_pages, 500)
+
   return (
     <>
       {q && (
@@ -91,30 +90,7 @@ async function MovieResults({
         </p>
       )}
       <MovieGrid movies={data.results} />
-      {hasMore && (
-        <div className="mt-12 flex justify-center">
-          <Link
-            href={showMoreHref}
-            className="rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-surface-2"
-          >
-            Show more
-          </Link>
-        </div>
-      )}
+      {data.results.length > 0 && <Pagination page={page} totalPages={totalPages} />}
     </>
   )
-}
-
-function buildShowMoreHref(
-  rawParams: Record<string, string | string[] | undefined>,
-  nextPage: number
-): string {
-  const params = new URLSearchParams()
-  for (const [key, value] of Object.entries(rawParams)) {
-    if (key === 'page' || value === undefined) continue
-    params.set(key, Array.isArray(value) ? value.join(',') : value)
-  }
-  if (nextPage > 1) params.set('page', String(nextPage))
-  const qs = params.toString()
-  return `/discover${qs ? `?${qs}` : ''}`
 }

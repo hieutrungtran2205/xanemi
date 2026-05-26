@@ -91,7 +91,7 @@
 - [ ] Breadcrumb tĩnh: Home > [Mood Label]
 - [ ] Hero: mood emoji + label + description + accent
 - [ ] MovieGrid render mood results
-- [ ] "Show more" pagination
+- [x] Numbered pagination (prev/next + ellipsis + jump-to-page) — `components/movie/pagination.tsx`
 - [ ] Empty state
 - [ ] Invalid mood → 404
 **Acceptance**: Click mood từ landing → 20 phim relevant, show more work, breadcrumb hiển thị đúng mood
@@ -158,6 +158,13 @@
 - [ ] Slice 3.9: Mood log tracking (anonymous + auth)
 
 ---
+
+## Pagination (hoàn thành) ✅
+
+- [x] `components/movie/pagination.tsx` — numbered pages + ellipsis + jump-to-page inline
+- [x] `app/discover/page.tsx` — numbered pagination, Suspense key đổi theo filter/page → skeleton đúng
+- [x] `app/trending/page.tsx` — numbered pagination, giới hạn 50 trang, `getTrending` nhận `page`
+- [ ] `app/discover/[mood]/page.tsx` — chưa wire (pending Slice 1.7)
 
 ## Week 4+: Post-MVP ⬜
 

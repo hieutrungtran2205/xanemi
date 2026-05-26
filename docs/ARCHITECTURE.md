@@ -145,6 +145,23 @@ External:
 - Mood of the Day là static suggestion (không personalized), đủ để guide user mới
 - Tốn thêm 1 TMDB fetch server-side cho backdrop (cache 1h, cost thấp)
 
+### ADR-016: Numbered Pagination — RSC + nuqs, không TanStack Query
+**Decision**: Pagination dùng RSC + nuqs, không dùng client-side data fetching (TanStack Query, SWR). `page` sống ở URL (`?page=N`). Server Component đọc từ `searchParams`, fetch TMDB, render `<MovieGrid>` + `<Pagination>`. `<Pagination>` là Client Component dùng nuqs `useQueryState('page')` để navigate.
+
+**`<Pagination>` component** (`components/movie/pagination.tsx`):
+- Prev/Next + numbered pages với ellipsis (`1 … 5 [6] 7 … 500`)
+- Jump-to-page input + Go button (chỉ hiện khi totalPages > 10), inline cùng row, cách bằng divider dọc
+- Scroll to top (smooth) khi đổi trang
+- Tất cả navigation qua nuqs `setPage`, không tự dựng `router.push`
+
+**Skeleton khi filter/page thay đổi**: Thêm `key={...filters...page}` vào `<Suspense>` bọc `MovieResults` → React unmount boundary cũ, show `<MovieGridSkeleton>` trong khi server stream data mới. Filter sidebar giữ nguyên, chỉ grid skeleton.
+
+**Page limits**: Discover = 500 (TMDB hard cap). Trending = 50 (data thay đổi liên tục, page cao không có giá trị).
+
+**Why**: Giữ đúng kiến trúc RSC của project — không thêm client data-fetching layer. `page` ở URL = shareable, bookmarkable, SEO-friendly. nuqs đủ mạnh cho URL state mà không cần thêm dependency.
+
+**Trade-off**: Mỗi lần đổi trang là full server round-trip (không smooth như client-side). Chấp nhận được vì data phim ít thay đổi và được cache.
+
 ## Data Model (implement Week 3)
 
 Movie-only, không có `mediaType` field.

@@ -35,10 +35,11 @@ export async function getGenreList(): Promise<Genre[]> {
   }
 }
 
-export async function getTrending(timeWindow: 'day' | 'week' = 'week') {
-  return tmdbFetch<TMDBResponse<Movie>>(`/trending/movie/${timeWindow}`, {
-    next: { revalidate: 3600, tags: ['trending'] },
-  })
+export async function getTrending(timeWindow: 'day' | 'week' = 'week', page = 1) {
+  return tmdbFetch<TMDBResponse<Movie>>(
+    `/trending/movie/${timeWindow}?page=${page}`,
+    { next: { revalidate: 3600, tags: ['trending'] } },
+  )
 }
 
 export async function getMovieDetail(tmdbId: number) {
