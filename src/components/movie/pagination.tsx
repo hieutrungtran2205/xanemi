@@ -5,6 +5,7 @@ import { useQueryState } from 'nuqs'
 import { parseAsInteger } from 'nuqs'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 interface Props {
   page: number
@@ -98,7 +99,7 @@ export function Pagination({ page, totalPages }: Props) {
 
       {totalPages > 10 && (
         <>
-          <div className="mx-2 h-5 w-px bg-border" />
+          <Separator orientation="vertical" className="mx-2 h-5" />
           <div className="flex items-center overflow-hidden rounded-md border border-border bg-surface transition-colors focus-within:border-foreground/40">
             <input
               type="text"

@@ -1,4 +1,13 @@
+import { Fragment } from "react";
 import Link from "next/link";
+import {
+  Breadcrumb as BreadcrumbRoot,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface Crumb {
   label: string;
@@ -7,22 +16,23 @@ interface Crumb {
 
 export function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
   return (
-    <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-muted-foreground">
-      {crumbs.map((crumb, i) => (
-        <span key={i} className="flex items-center gap-2">
-          {i > 0 && <span aria-hidden className="opacity-40">/</span>}
-          {crumb.href ? (
-            <Link
-              href={crumb.href}
-              className="transition-colors duration-200 hover:text-foreground"
-            >
-              {crumb.label}
-            </Link>
-          ) : (
-            <span className="text-foreground">{crumb.label}</span>
-          )}
-        </span>
-      ))}
-    </nav>
+    <BreadcrumbRoot>
+      <BreadcrumbList>
+        {crumbs.map((crumb, i) => (
+          <Fragment key={i}>
+            {i > 0 && <BreadcrumbSeparator />}
+            <BreadcrumbItem>
+              {crumb.href ? (
+                <BreadcrumbLink asChild>
+                  <Link href={crumb.href}>{crumb.label}</Link>
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+              )}
+            </BreadcrumbItem>
+          </Fragment>
+        ))}
+      </BreadcrumbList>
+    </BreadcrumbRoot>
   );
 }

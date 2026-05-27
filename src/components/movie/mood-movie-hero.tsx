@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { backdropUrl, posterUrl, releaseYear } from "@/lib/tmdb/utils"
+import { Badge } from "@/components/ui/badge"
 import { BackButton } from "@/components/layout/back-button"
 import type { Movie } from "@/lib/tmdb/types"
 import type { MoodDefinition } from "@/lib/moods/types"
@@ -73,17 +74,18 @@ export function MoodMovieHero({ movie, mood }: Props) {
                 <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/65">
                   Handpicked for your mood
                 </span>
-                <div
-                  className="inline-flex w-fit items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium"
+                <Badge
+                  variant="outline"
+                  className="h-auto gap-1.5 rounded-md px-2.5 py-1"
                   style={{
                     backgroundColor: `${mood.accent}18`,
                     color: mood.accent,
-                    border: `1px solid ${mood.accent}35`,
+                    borderColor: `${mood.accent}35`,
                   }}
                 >
                   <span>{mood.emoji}</span>
                   <span>{mood.label}</span>
-                </div>
+                </Badge>
                 <p className="text-xs italic text-muted-foreground/70">{mood.description}</p>
               </div>
 

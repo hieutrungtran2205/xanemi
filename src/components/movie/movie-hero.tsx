@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { backdropUrl, posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MovieDetail } from "@/lib/tmdb/types";
 
@@ -93,12 +94,13 @@ export function MovieHero({ movie }: Props) {
               {movie.genres.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {movie.genres.map((g) => (
-                    <span
+                    <Badge
                       key={g.id}
-                      className="rounded-md border border-border bg-surface px-2.5 py-1 text-xs text-muted-foreground"
+                      variant="outline"
+                      className="h-auto rounded-md bg-surface px-2.5 py-1 text-muted-foreground"
                     >
                       {g.name}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
               )}
