@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { backdropUrl, posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { MovieDetail } from "@/lib/tmdb/types";
 
 interface Props {
@@ -112,19 +113,19 @@ export function MovieHero({ movie }: Props) {
 export function MovieHeroSkeleton() {
   return (
     <section>
-      <div className="h-[60vh] min-h-80 animate-pulse bg-surface" />
+      <Skeleton className="h-[60vh] min-h-80 rounded-none bg-surface" />
       <div className="relative -mt-24 md:-mt-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">
             <div className="w-32 shrink-0 sm:w-44 md:w-56">
-              <div className="aspect-2/3 animate-pulse rounded-lg bg-surface-2" />
+              <Skeleton className="aspect-2/3 rounded-lg" />
             </div>
             <div className="flex flex-col gap-3 pb-2 md:pb-10">
-              <div className="h-8 w-64 animate-pulse rounded bg-surface-2" />
-              <div className="h-4 w-40 animate-pulse rounded bg-surface-2" />
+              <Skeleton className="h-8 w-64 rounded" />
+              <Skeleton className="h-4 w-40 rounded" />
               <div className="flex gap-2">
-                <div className="h-6 w-16 animate-pulse rounded bg-surface-2" />
-                <div className="h-6 w-20 animate-pulse rounded bg-surface-2" />
+                <Skeleton className="h-6 w-16 rounded" />
+                <Skeleton className="h-6 w-20 rounded" />
               </div>
             </div>
           </div>

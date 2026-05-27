@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Movie } from "@/lib/tmdb/types";
 
 interface Props {
@@ -46,10 +47,10 @@ export function MovieCard({ movie, priority = false }: Props) {
 export function MovieCardSkeleton() {
   return (
     <div>
-      <div className="aspect-[2/3] animate-pulse rounded-lg bg-surface-2" />
+      <Skeleton className="aspect-2/3 rounded-lg" />
       <div className="mt-2 space-y-1.5 px-0.5">
-        <div className="h-3.5 w-3/4 animate-pulse rounded bg-surface-2" />
-        <div className="h-3 w-1/2 animate-pulse rounded bg-surface-2" />
+        <Skeleton className="h-3.5 w-3/4 rounded" />
+        <Skeleton className="h-3 w-1/2 rounded" />
       </div>
     </div>
   );
