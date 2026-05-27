@@ -37,6 +37,7 @@ Project này build theo **feature-by-feature (vertical slices)**, KHÔNG generat
 7. **No `any`, no `@ts-ignore`**.
 8. **No pirate video**. Video = YouTube trailer + TMDB watch providers only.
 9. **MVP = movie only**. KHÔNG build TV series (defer V2).
+10. **TMDB attribution BẮT BUỘC**: Footer phải có text "This product uses the TMDB API but is not endorsed or certified by TMDB" + logo TMDB. Đây là yêu cầu bắt buộc của TMDB terms — không được bỏ.
 
 ## Naming Conventions
 
@@ -50,7 +51,7 @@ Project này build theo **feature-by-feature (vertical slices)**, KHÔNG generat
 
 ```
 app/
-  (marketing)/page.tsx       # Landing - hero banner (backdrop trending) + mood picker + trending, no blocking modal
+  (marketing)/page.tsx       # Landing - mood picker + trending
   discover/[mood]/page.tsx   # Mood result list + filters
   movie/[slug]/page.tsx      # Movie detail
   trending/page.tsx          # Hot now
@@ -69,7 +70,7 @@ components/
   movie/                     # MovieCard, MovieGrid, MovieHero, etc.
   filter/                    # Filter sidebar/drawer (Week 2)
   player/                    # TrailerEmbed (lite-youtube)
-  layout/                    # Header, Footer
+  layout/                    # Header, Footer, Logo, Breadcrumb
   seo/                       # JSON-LD
 lib/
   tmdb/                      # client, types, endpoints, utils
@@ -85,6 +86,13 @@ lib/
 **Reference sites**: Letterboxd + Mubi.
 
 Chi tiết đầy đủ (color tokens, typography, spacing, component patterns, anti-patterns) ở **`docs/DESIGN.md`** — ĐỌC file này trước khi build bất kỳ UI nào.
+
+## UI Rules (post-refactor)
+- Trước khi viết JSX: check components/ui/ có primitive phù hợp chưa (Button, Badge, Skeleton, Select...). Có thì dùng, KHÔNG viết raw <button>/<input>/<select>.
+- Trước khi viết layout: check components/layout/ (Container, PageShell, SectionHeading, PageHeader) và docs/DESIGN.md. Có pattern thì dùng, KHÔNG tự chế lại class wrapper.
+- Nav link = <Link> (+ buttonVariants() nếu cần trông như nút). KHÔNG biến nav link thành <Button> hay Tabs.
+- Interactive element có action = Button. Label tĩnh = Badge. Đừng nhầm.
+- nuqs là source of truth cho filter/search/pagination. Đổi UI control không được đổi logic ghi URL.
 
 ### Tóm tắt nhanh
 - **Dark-only** MVP. Background near-black `#0A0A0B`, surface `#141416`
