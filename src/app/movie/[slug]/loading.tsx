@@ -1,12 +1,13 @@
 import { MovieHeroSkeleton } from "@/components/movie/movie-hero";
+import { PageShell } from "@/components/layout/page-shell";
+import { Container } from "@/components/layout/container";
 
 export default function Loading() {
   return (
-    <main className="min-h-screen bg-background">
+    <PageShell>
       <MovieHeroSkeleton />
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
-        {/* Synopsis skeleton */}
+      <Container className="py-12">
         <section className="mb-12">
           <div className="mb-4 h-6 w-24 animate-pulse rounded bg-surface-2" />
           <div className="max-w-3xl space-y-2">
@@ -16,7 +17,6 @@ export default function Loading() {
           </div>
         </section>
 
-        {/* Cast skeleton */}
         <section>
           <div className="mb-4 h-6 w-16 animate-pulse rounded bg-surface-2" />
           <div className="grid grid-cols-5 gap-3 sm:grid-cols-7 md:grid-cols-8 lg:grid-cols-10">
@@ -29,7 +29,7 @@ export default function Loading() {
             ))}
           </div>
         </section>
-      </div>
-    </main>
+      </Container>
+    </PageShell>
   );
 }

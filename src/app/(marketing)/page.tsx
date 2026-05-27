@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import { getTrending } from "@/lib/tmdb/endpoints";
 import { MovieGrid, MovieGridSkeleton } from "@/components/movie/movie-grid";
 import { HeroBanner } from "@/components/layout/hero-banner";
+import { PageShell } from "@/components/layout/page-shell";
+import { Container } from "@/components/layout/container";
+import { SectionHeading } from "@/components/layout/section-heading";
 
 async function TrendingSection() {
   const data = await getTrending();
@@ -10,27 +13,17 @@ async function TrendingSection() {
 
 export default async function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
+    <PageShell>
       <HeroBanner />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
+      <Container>
         <section className="py-16 sm:py-20">
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="font-heading text-xl font-semibold tracking-tight text-foreground">
-              Trending
-            </h2>
-            <a
-              href="/trending"
-              className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
-            >
-              Show more →
-            </a>
-          </div>
+          <SectionHeading title="Trending" href="/trending" />
           <Suspense fallback={<MovieGridSkeleton count={10} />}>
             <TrendingSection />
           </Suspense>
         </section>
-      </div>
-    </main>
+      </Container>
+    </PageShell>
   );
 }

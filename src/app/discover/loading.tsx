@@ -1,17 +1,19 @@
 import { MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { PageShell } from '@/components/layout/page-shell'
+import { Container } from '@/components/layout/container'
 
 export default function DiscoverLoading() {
   return (
-    <main className="min-h-screen bg-background">
+    <PageShell>
       <div className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8">
+        <Container className="py-6">
           <div className="h-7 w-40 animate-pulse rounded bg-surface-2" />
-        </div>
+        </Container>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+      <Container className="py-10">
         <MovieGridSkeleton count={20} />
-      </div>
-    </main>
+      </Container>
+    </PageShell>
   )
 }

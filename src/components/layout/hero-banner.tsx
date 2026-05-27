@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTrending } from "@/lib/tmdb/endpoints";
 import { backdropUrl } from "@/lib/tmdb/utils";
 import { MoodPicker } from "@/components/mood/mood-picker";
+import { Container } from "./container";
 
 export async function HeroBanner() {
   const trending = await getTrending();
@@ -20,12 +21,10 @@ export async function HeroBanner() {
           className="object-cover"
         />
       )}
-      {/* base darkening layer */}
       <div className="absolute inset-0 bg-black/70" />
-      {/* directional gradient — heavier at bottom where text sits */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-transparent" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-8">
+      <Container className="relative z-10 w-full">
         <h1 className="mb-2 font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl">
           What&apos;s your mood tonight?
         </h1>
@@ -33,7 +32,7 @@ export async function HeroBanner() {
           Pick a feeling. We&apos;ll find the film.
         </p>
         <MoodPicker variant="hero" />
-      </div>
+      </Container>
     </section>
   );
 }

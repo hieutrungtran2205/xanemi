@@ -3,6 +3,8 @@ import { Suspense } from 'react'
 import { getTrending } from '@/lib/tmdb/endpoints'
 import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
 import { Pagination } from '@/components/movie/pagination'
+import { PageShell } from '@/components/layout/page-shell'
+import { Container } from '@/components/layout/container'
 
 interface PageProps {
   searchParams: Promise<{ period?: string; page?: string }>
@@ -32,9 +34,9 @@ export default async function TrendingPage({ searchParams }: PageProps) {
   const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1)
 
   return (
-    <main className="min-h-screen bg-background">
+    <PageShell>
       <div className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-8">
+        <Container className="py-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
               Trending
@@ -63,14 +65,14 @@ export default async function TrendingPage({ searchParams }: PageProps) {
               </Link>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+      <Container className="py-10">
         <Suspense key={`${timeWindow}-${page}`} fallback={<MovieGridSkeleton count={20} />}>
           <TrendingResults timeWindow={timeWindow} page={page} />
         </Suspense>
-      </div>
-    </main>
+      </Container>
+    </PageShell>
   )
 }

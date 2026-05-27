@@ -5,6 +5,8 @@ import { getMoviesByMood } from '@/lib/moods/engine'
 import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
 import { MoodMovieHero, MoodMovieHeroSkeleton } from '@/components/movie/mood-movie-hero'
 import { Pagination } from '@/components/movie/pagination'
+import { PageShell } from '@/components/layout/page-shell'
+import { Container } from '@/components/layout/container'
 import type { MoodId } from '@/lib/moods/types'
 
 interface PageProps {
@@ -21,22 +23,21 @@ export default async function DiscoverPage({ params, searchParams }: PageProps) 
   const page = Math.max(1, parseInt((rawParams.page as string) ?? '1', 10) || 1)
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Hero + results */}
+    <PageShell>
       <Suspense
         key={page}
         fallback={
           <>
             <MoodMovieHeroSkeleton />
-            <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+            <Container className="py-10">
               <MovieGridSkeleton count={19} />
-            </div>
+            </Container>
           </>
         }
       >
         <MoodResults moodId={moodDef.id} moodDef={moodDef} page={page} />
       </Suspense>
-    </main>
+    </PageShell>
   )
 }
 
@@ -61,20 +62,19 @@ async function MoodResults({
 
   const heroMovie = data.results[0]
   const restMovies = data.results.slice(1)
-
   const totalPages = Math.min(data.total_pages, 50)
 
   return (
     <>
       <MoodMovieHero movie={heroMovie} mood={moodDef} />
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+      <Container className="py-10">
         <p className="mb-6 text-xs font-medium uppercase tracking-widest text-muted-foreground">
           More films for this mood
         </p>
         <MovieGrid movies={restMovies} />
         <Pagination page={page} totalPages={totalPages} />
-      </div>
+      </Container>
     </>
   )
 }

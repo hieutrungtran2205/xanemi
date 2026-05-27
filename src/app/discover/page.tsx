@@ -7,6 +7,8 @@ import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
 import { FilterPanel } from '@/components/filter/filter-panel'
 import { ActiveFilterChips } from '@/components/filter/active-filter-chips'
 import { Pagination } from '@/components/movie/pagination'
+import { PageShell } from '@/components/layout/page-shell'
+import { Container } from '@/components/layout/container'
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -21,9 +23,9 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
   const genres = await getGenreList()
 
   return (
-    <main className="min-h-screen bg-background">
+    <PageShell>
       <div className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8">
+        <Container className="py-6">
           <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             {q ? `"${q}"` : 'Browse Movies'}
           </h1>
@@ -34,10 +36,10 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
               </Link>
             </p>
           )}
-        </div>
+        </Container>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+      <Container className="py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           {!q && <FilterPanel genres={genres} />}
 
@@ -48,8 +50,8 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
             </Suspense>
           </div>
         </div>
-      </div>
-    </main>
+      </Container>
+    </PageShell>
   )
 }
 

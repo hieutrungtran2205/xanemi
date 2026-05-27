@@ -13,6 +13,9 @@ import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
 import { WatchProviders } from "@/components/movie/watch-providers";
 import { BackButton } from "@/components/layout/back-button";
+import { PageShell } from "@/components/layout/page-shell";
+import { Container } from "@/components/layout/container";
+import { SectionHeading } from "@/components/layout/section-heading";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -44,7 +47,7 @@ export default async function MoviePage({ params }: PageProps) {
   const usProviders = watchProviders?.results?.["US"] ?? null;
 
   return (
-    <main className="min-h-screen bg-background">
+    <PageShell>
       <div className="relative">
         <div className="absolute left-4 top-4 z-10 sm:left-8 sm:top-6">
           <BackButton />
@@ -52,50 +55,37 @@ export default async function MoviePage({ params }: PageProps) {
         <MovieHero movie={movie} />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
-        {/* Synopsis + Watch Providers row */}
+      <Container className="py-12">
         <div className="mb-12 flex flex-col gap-10 lg:flex-row lg:gap-16">
-          {/* Synopsis */}
           {movie.overview && (
             <section className="min-w-0 flex-1">
-              <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight text-foreground">
-                Synopsis
-              </h2>
+              <SectionHeading title="Synopsis" />
               <p className="text-base leading-relaxed text-muted-foreground">
                 {movie.overview}
               </p>
             </section>
           )}
 
-          {/* Watch Providers */}
           {usProviders && (
             <section className="lg:w-52 lg:shrink-0">
-              <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight text-foreground">
-                Where to Watch
-              </h2>
+              <SectionHeading title="Where to Watch" />
               <WatchProviders providers={usProviders} />
             </section>
           )}
         </div>
 
-        {/* Trailer */}
         {trailer && (
           <section className="mb-12">
-            <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight text-foreground">
-              Trailer
-            </h2>
+            <SectionHeading title="Trailer" />
             <div className="max-w-3xl">
               <TrailerEmbed videoKey={trailer.key} title={movie.title} />
             </div>
           </section>
         )}
 
-        {/* Cast */}
         {cast.length > 0 && (
           <section className="mb-12">
-            <h2 className="mb-4 font-heading text-xl font-semibold tracking-tight text-foreground">
-              Cast
-            </h2>
+            <SectionHeading title="Cast" />
             <div className="grid grid-cols-5 gap-3 sm:grid-cols-7 md:grid-cols-8 lg:grid-cols-10">
               {cast.map((member) => {
                 const photo = profileUrl(member.profile_path, "w185");
@@ -128,16 +118,14 @@ export default async function MoviePage({ params }: PageProps) {
             </div>
           </section>
         )}
-        {/* Similar Movies */}
+
         {similar && similar.results.length > 0 && (
           <section>
-            <h2 className="mb-6 font-heading text-xl font-semibold tracking-tight text-foreground">
-              Similar Movies
-            </h2>
+            <SectionHeading title="Similar Movies" className="mb-6" />
             <MovieGrid movies={similar.results.slice(0, 10)} />
           </section>
         )}
-      </div>
-    </main>
+      </Container>
+    </PageShell>
   );
 }

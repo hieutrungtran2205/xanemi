@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
+import { Container } from "./container";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
-      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-8">
+      <Container className="flex items-center gap-4 py-3">
         <Logo />
         <div className="flex-1" />
         <SearchBar />
@@ -22,12 +23,11 @@ export function Header() {
           >
             Trending
           </Link>
-          {/* Sign in — placeholder until Week 3 auth */}
           <button className="rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors duration-200 hover:border-foreground/40 hover:text-foreground">
             Sign in
           </button>
         </nav>
-      </div>
+      </Container>
     </header>
   );
 }

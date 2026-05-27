@@ -1,9 +1,10 @@
 import { Logo } from "./logo";
+import { Container } from "./container";
 
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-border bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-8">
+      <Container className="py-10">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <Logo size="sm" />
@@ -28,7 +29,7 @@ export function Footer() {
             </p>
           </div>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }
