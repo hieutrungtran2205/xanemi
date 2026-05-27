@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
 import { Container } from "./container";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   return (
@@ -23,9 +24,9 @@ export function Header() {
           >
             Trending
           </Link>
-          <button className="rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors duration-200 hover:border-foreground/40 hover:text-foreground">
+          <Button variant="outline" size="sm">
             Sign in
-          </button>
+          </Button>
         </nav>
       </Container>
     </header>

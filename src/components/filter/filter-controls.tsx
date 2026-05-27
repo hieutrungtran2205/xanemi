@@ -8,6 +8,15 @@ import {
   type FilterParams,
 } from '@/lib/filters/types'
 import type { Genre } from '@/lib/tmdb/types'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Slider } from '@/components/ui/slider'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface FilterControlsProps {
   genres: Genre[]
@@ -26,19 +35,22 @@ export function FilterControls({ genres, local, setLocal }: FilterControlsProps)
           {genres.map((g) => {
             const checked = local.genres.includes(g.id)
             return (
-              <label key={g.id} className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="checkbox"
+              <label
+                key={g.id}
+                htmlFor={`genre-${g.id}`}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <Checkbox
+                  id={`genre-${g.id}`}
                   checked={checked}
-                  onChange={() =>
+                  onCheckedChange={(c) =>
                     setLocal((prev) => ({
                       ...prev,
-                      genres: checked
-                        ? prev.genres.filter((id) => id !== g.id)
-                        : [...prev.genres, g.id],
+                      genres: c
+                        ? [...prev.genres, g.id]
+                        : prev.genres.filter((id) => id !== g.id),
                     }))
                   }
-                  className="size-3.5 rounded-sm border-border accent-foreground"
                 />
                 <span className="text-sm text-foreground">{g.name}</span>
               </label>
@@ -77,16 +89,12 @@ export function FilterControls({ genres, local, setLocal }: FilterControlsProps)
             {local.minRating === 0 ? 'Any' : `${local.minRating}+`}
           </span>
         </div>
-        <input
-          type="range"
+        <Slider
           min={0}
           max={9}
           step={0.5}
-          value={local.minRating}
-          onChange={(e) =>
-            setLocal((p) => ({ ...p, minRating: parseFloat(e.target.value) }))
-          }
-          className="w-full cursor-pointer accent-foreground"
+          value={[local.minRating]}
+          onValueChange={([v]) => setLocal((p) => ({ ...p, minRating: v }))}
         />
         <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
           <span>Any</span>
@@ -98,38 +106,46 @@ export function FilterControls({ genres, local, setLocal }: FilterControlsProps)
         <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Sort By
         </h3>
-        <select
+        <Select
           value={local.sort}
-          onChange={(e) =>
-            setLocal((p) => ({ ...p, sort: e.target.value as FilterParams['sort'] }))
+          onValueChange={(v) =>
+            setLocal((p) => ({ ...p, sort: v as FilterParams['sort'] }))
           }
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-ring"
         >
-          {SORT_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SORT_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </section>
 
       <section className="py-4">
         <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Language
         </h3>
-        <select
+        <Select
           value={local.lang}
-          onChange={(e) =>
-            setLocal((p) => ({ ...p, lang: e.target.value as FilterParams['lang'] }))
+          onValueChange={(v) =>
+            setLocal((p) => ({ ...p, lang: v as FilterParams['lang'] }))
           }
-          className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-ring"
         >
-          {LANGUAGE_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {LANGUAGE_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </section>
     </>
   )
@@ -148,16 +164,20 @@ function YearSelect({
 }) {
   const years = Array.from({ length: max - min + 1 }, (_, i) => max - i)
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(parseInt(e.target.value, 10))}
-      className="flex-1 rounded-md border border-border bg-surface px-2 py-2 text-sm text-foreground outline-none focus:border-ring"
+    <Select
+      value={String(value)}
+      onValueChange={(v) => onChange(parseInt(v, 10))}
     >
-      {years.map((y) => (
-        <option key={y} value={y}>
-          {y}
-        </option>
-      ))}
-    </select>
+      <SelectTrigger className="flex-1">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {years.map((y) => (
+          <SelectItem key={y} value={String(y)}>
+            {y}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }

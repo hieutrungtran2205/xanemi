@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export function SearchBar() {
   const router = useRouter()
@@ -35,13 +36,15 @@ export function SearchBar() {
         className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
       />
       {q && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           onClick={() => { setQ(''); inputRef.current?.focus() }}
-          className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+          className="size-5 shrink-0"
         >
           <X size={12} />
-        </button>
+        </Button>
       )}
     </form>
   )

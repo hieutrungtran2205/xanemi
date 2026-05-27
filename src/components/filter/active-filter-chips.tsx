@@ -3,6 +3,7 @@
 import { useQueryState, useQueryStates } from 'nuqs'
 import { parseAsInteger } from 'nuqs'
 import { X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { filterParsers } from '@/lib/filters/parsers'
 import {
   DEFAULT_FILTERS,
@@ -77,22 +78,23 @@ export function ActiveFilterChips({ genres }: Props) {
   return (
     <div className="mb-6 flex flex-wrap items-center gap-2">
       {chips.map((chip) => (
-        <button
+        <Button
           key={chip.key}
+          variant="outline"
+          size="sm"
           onClick={chip.onRemove}
-          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-xs text-foreground transition-colors duration-200 hover:border-muted-foreground hover:bg-surface-2"
         >
           {chip.label}
           <X size={11} className="text-muted-foreground" />
-        </button>
+        </Button>
       ))}
       {chips.length > 1 && (
-        <button
+        <Button
+          variant="link"
           onClick={() => { setFilters(DEFAULT_FILTERS); setPage(null, { shallow: false }) }}
-          className="text-xs text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
         >
           Clear all
-        </button>
+        </Button>
       )}
     </div>
   )

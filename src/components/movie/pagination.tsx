@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQueryState } from 'nuqs'
 import { parseAsInteger } from 'nuqs'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   page: number
@@ -53,14 +54,15 @@ export function Pagination({ page, totalPages }: Props) {
 
   return (
     <div className="mt-12 flex flex-wrap items-center justify-center gap-1">
-      <button
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={() => goToPage(page - 1)}
         disabled={page <= 1}
         aria-label="Previous page"
-        className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-surface hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
       >
         <ChevronLeft size={16} />
-      </button>
+      </Button>
 
       {pages.map((p, i) =>
         p === '...' ? (
@@ -71,30 +73,28 @@ export function Pagination({ page, totalPages }: Props) {
             …
           </span>
         ) : (
-          <button
+          <Button
             key={p}
+            variant={p === page ? 'default' : 'ghost'}
+            size="icon"
             onClick={() => goToPage(p as number)}
             aria-label={`Page ${p}`}
             aria-current={p === page ? 'page' : undefined}
-            className={`inline-flex size-9 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-              p === page
-                ? 'bg-foreground text-background'
-                : 'text-muted-foreground hover:bg-surface hover:text-foreground'
-            }`}
           >
             {p}
-          </button>
+          </Button>
         ),
       )}
 
-      <button
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={() => goToPage(page + 1)}
         disabled={page >= totalPages}
         aria-label="Next page"
-        className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-surface hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
       >
         <ChevronRight size={16} />
-      </button>
+      </Button>
 
       {totalPages > 10 && (
         <>
@@ -110,15 +110,17 @@ export function Pagination({ page, totalPages }: Props) {
               aria-label="Go to page"
               className="w-11 bg-transparent px-2 py-1.5 text-center text-sm text-foreground outline-none"
             />
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => {
                 const p = parseInt(inputVal, 10)
                 if (!isNaN(p)) goToPage(p)
               }}
-              className="border-l border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+              className="rounded-l-none border-l border-border"
             >
               Go
-            </button>
+            </Button>
           </div>
         </>
       )}

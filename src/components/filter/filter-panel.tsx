@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useQueryState, useQueryStates } from 'nuqs'
 import { parseAsInteger } from 'nuqs'
 import { SlidersHorizontal } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { filterParsers } from '@/lib/filters/parsers'
 import { filtersToUrlParams } from '@/lib/filters/query-builder'
 import {
@@ -75,19 +76,17 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
             <FilterControls genres={genres} local={local} setLocal={setLocal} />
           </div>
           <div className="mt-4 flex gap-3">
-            <button
-              onClick={handleClear}
-              className="rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-2"
-            >
+            <Button variant="outline" onClick={handleClear}>
               Clear
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="default"
               onClick={handleApply}
               disabled={isPending}
-              className="flex-1 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/90 disabled:opacity-60"
+              className="flex-1"
             >
               {isPending ? 'Loading…' : 'Browse Movies →'}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -95,10 +94,10 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
         <div className="lg:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface-2">
+              <Button variant="outline">
                 <SlidersHorizontal size={14} />
                 Browse &amp; Filter
-              </button>
+              </Button>
             </SheetTrigger>
             <SheetContent side="bottom" className="flex max-h-[63vh] flex-col rounded-t-xl px-0">
               <SheetHeader className="border-b border-border px-5 pb-4">
@@ -110,19 +109,21 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
                 </div>
               </div>
               <div className="flex gap-3 border-t border-border px-5 py-4">
-                <button
+                <Button
+                  variant="outline"
                   onClick={handleClear}
-                  className="flex-1 rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-2"
+                  className="flex-1"
                 >
                   Clear
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="default"
                   onClick={handleApply}
                   disabled={isPending}
-                  className="flex-1 rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90 disabled:opacity-60"
+                  className="flex-1"
                 >
                   {isPending ? 'Loading…' : 'Browse →'}
-                </button>
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
@@ -138,13 +139,14 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
       <aside className="hidden lg:flex w-64 xl:w-72 shrink-0 flex-col">
         <div className="sticky top-20 flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden">
           <FilterHeader activeCount={activeCount} onClear={handleClear} />
-          <button
+          <Button
+            variant="default"
             onClick={handleApply}
             disabled={isPending}
-            className="mt-2 w-full rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors duration-200 hover:bg-foreground/90 disabled:opacity-60"
+            className="mt-2 w-full"
           >
             {isPending ? 'Loading…' : 'Apply Filters'}
-          </button>
+          </Button>
           <div className="mt-2 min-h-0 flex-1 overflow-y-auto divide-y divide-border pr-1">
             <FilterControls genres={genres} local={local} setLocal={setLocal} />
           </div>
@@ -155,7 +157,7 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
       <div className="lg:hidden">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <button className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface-2">
+            <Button variant="outline">
               <SlidersHorizontal size={14} />
               Filters
               {activeCount > 0 && (
@@ -163,7 +165,7 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
                   {activeCount}
                 </span>
               )}
-            </button>
+            </Button>
           </SheetTrigger>
           <SheetContent side="bottom" className="flex max-h-[90vh] flex-col overflow-hidden rounded-t-xl px-0">
             <SheetHeader className="border-b border-border px-5 pb-4">
@@ -175,19 +177,21 @@ export function FilterPanel({ genres, mode = 'url' }: Props) {
               </div>
             </div>
             <div className="flex gap-3 border-t border-border px-5 py-4">
-              <button
+              <Button
+                variant="outline"
                 onClick={handleClear}
-                className="flex-1 rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-2"
+                className="flex-1"
               >
                 Clear all
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="default"
                 onClick={handleApply}
                 disabled={isPending}
-                className="flex-1 rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90 disabled:opacity-60"
+                className="flex-1"
               >
                 {isPending ? 'Loading…' : 'Apply'}
-              </button>
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -207,12 +211,9 @@ function FilterHeader({
     <div className="flex items-center justify-between py-2">
       <span className="text-sm font-medium text-foreground">Filters</span>
       {activeCount > 0 && (
-        <button
-          onClick={onClear}
-          className="text-xs text-muted-foreground transition-colors hover:text-foreground"
-        >
+        <Button variant="ghost" size="sm" onClick={onClear}>
           Clear all
-        </button>
+        </Button>
       )}
     </div>
   )
