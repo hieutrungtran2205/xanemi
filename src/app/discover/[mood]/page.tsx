@@ -2,9 +2,9 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { MOOD_DEFINITIONS } from '@/lib/moods/definitions'
 import { getMoviesByMood } from '@/lib/moods/engine'
-import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { MovieResults } from '@/components/movie/movie-results'
 import { MoodMovieHero, MoodMovieHeroSkeleton } from '@/components/movie/mood-movie-hero'
-import { Pagination } from '@/components/movie/pagination'
 import { PageShell } from '@/components/layout/page-shell'
 import { Container } from '@/components/layout/container'
 import type { MoodId } from '@/lib/moods/types'
@@ -62,7 +62,6 @@ async function MoodResults({
 
   const heroMovie = data.results[0]
   const restMovies = data.results.slice(1)
-  const totalPages = Math.min(data.total_pages, 50)
 
   return (
     <>
@@ -72,8 +71,10 @@ async function MoodResults({
         <p className="mb-6 text-xs font-medium uppercase tracking-widest text-muted-foreground">
           More films for this mood
         </p>
-        <MovieGrid movies={restMovies} />
-        <Pagination page={page} totalPages={totalPages} />
+        <MovieResults
+          data={{ results: restMovies, total_pages: data.total_pages }}
+          page={page}
+        />
       </Container>
     </>
   )

@@ -3,10 +3,11 @@ import Link from 'next/link'
 import { getDiscoverMovies, searchMovies, getGenreList } from '@/lib/tmdb/endpoints'
 import { filterParamsCache } from '@/lib/filters/parsers'
 import type { FilterParams } from '@/lib/filters/types'
-import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { MovieGridSkeleton } from '@/components/movie/movie-grid'
+import { MovieResults } from '@/components/movie/movie-results'
 import { FilterPanel } from '@/components/filter/filter-panel'
 import { ActiveFilterChips } from '@/components/filter/active-filter-chips'
-import { Pagination } from '@/components/movie/pagination'
+import { PageHeader } from '@/components/layout/page-header'
 import { PageShell } from '@/components/layout/page-shell'
 import { Container } from '@/components/layout/container'
 
@@ -24,20 +25,18 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
 
   return (
     <PageShell>
-      <div className="border-b border-border">
-        <Container className="py-6">
-          <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-            {q ? `"${q}"` : 'Browse Movies'}
-          </h1>
-          {q && (
-            <p className="mt-1 text-sm text-muted-foreground">
-              <Link href="/discover" className="underline-offset-4 hover:underline hover:text-foreground">
-                clear search
-              </Link>
-            </p>
-          )}
-        </Container>
-      </div>
+      <PageHeader title={q ? `"${q}"` : 'Browse Movies'}>
+        {q && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            <Link
+              href="/discover"
+              className="underline-offset-4 hover:underline hover:text-foreground"
+            >
+              clear search
+            </Link>
+          </p>
+        )}
+      </PageHeader>
 
       <Container className="py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
@@ -45,8 +44,11 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
 
           <div className="min-w-0 flex-1">
             {!q && <ActiveFilterChips genres={genres} />}
-            <Suspense key={`${q}-${page}-${JSON.stringify(filters)}`} fallback={<MovieGridSkeleton count={20} />}>
-              <MovieResults filters={filters} q={q} page={page} />
+            <Suspense
+              key={`${q}-${page}-${JSON.stringify(filters)}`}
+              fallback={<MovieGridSkeleton count={20} />}
+            >
+              <DiscoverResults filters={filters} q={q} page={page} />
             </Suspense>
           </div>
         </div>
@@ -55,7 +57,7 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
   )
 }
 
-async function MovieResults({
+async function DiscoverResults({
   filters,
   q,
   page,
@@ -82,8 +84,6 @@ async function MovieResults({
     )
   }
 
-  const totalPages = Math.min(data.total_pages, 500)
-
   return (
     <>
       {q && (
@@ -91,8 +91,7 @@ async function MovieResults({
           {data.total_results.toLocaleString()} results
         </p>
       )}
-      <MovieGrid movies={data.results} />
-      {data.results.length > 0 && <Pagination page={page} totalPages={totalPages} />}
+      <MovieResults data={data} page={page} maxPages={500} />
     </>
   )
 }

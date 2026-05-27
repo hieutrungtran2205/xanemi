@@ -1,5 +1,6 @@
 import { MovieGridSkeleton } from '@/components/movie/movie-grid'
 import { FilterPanelSkeleton } from '@/components/filter/filter-panel'
+import { PageHeader } from '@/components/layout/page-header'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PageShell } from '@/components/layout/page-shell'
 import { Container } from '@/components/layout/container'
@@ -7,11 +8,7 @@ import { Container } from '@/components/layout/container'
 export default function DiscoverLoading() {
   return (
     <PageShell>
-      <div className="border-b border-border">
-        <Container className="py-6">
-          <Skeleton className="h-7 w-40 rounded" />
-        </Container>
-      </div>
+      <PageHeader title={<Skeleton className="h-7 w-40 rounded" />} />
 
       <Container className="py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
