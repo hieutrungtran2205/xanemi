@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { backdropUrl, formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils"
+import { backdropUrl, formatRating, posterUrl, releaseYear, toSlug } from "@/lib/tmdb/utils"
 import { Badge } from "@/components/ui/badge"
 import { BackButton } from "@/components/layout/back-button"
 import type { Movie } from "@/lib/tmdb/types"
@@ -44,7 +44,7 @@ export function MoodMovieHero({ movie, mood }: Props) {
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">
             {/* Poster */}
             <Link
-              href={`/movie/${movie.id}`}
+              href={`/movie/${toSlug(movie)}`}
               tabIndex={-1}
               aria-hidden
               className="w-32 shrink-0 sm:w-40 md:w-52"
@@ -89,7 +89,7 @@ export function MoodMovieHero({ movie, mood }: Props) {
                 <p className="text-xs italic text-muted-foreground/70">{mood.description}</p>
               </div>
 
-              <Link href={`/movie/${movie.id}`} className="group w-fit">
+              <Link href={`/movie/${toSlug(movie)}`} className="group w-fit">
                 <h2 className="font-heading text-2xl font-semibold tracking-tight text-foreground transition-opacity group-hover:opacity-80 sm:text-3xl md:text-4xl">
                   {movie.title}
                 </h2>
@@ -112,7 +112,7 @@ export function MoodMovieHero({ movie, mood }: Props) {
               )}
 
               <Link
-                href={`/movie/${movie.id}`}
+                href={`/movie/${toSlug(movie)}`}
                 className="mt-1 inline-flex w-fit items-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-85"
               >
                 View film →

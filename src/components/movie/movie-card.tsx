@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { formatRating, posterUrl, releaseYear, toSlug } from "@/lib/tmdb/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Movie } from "@/lib/tmdb/types";
 
@@ -15,7 +15,7 @@ export function MovieCard({ movie, priority = false }: Props) {
   const rating = formatRating(movie.vote_average);
 
   return (
-    <Link href={`/movie/${movie.id}`} className="group block">
+    <Link href={`/movie/${toSlug(movie)}`} className="group block">
       <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface">
         {poster ? (
           <Image

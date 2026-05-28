@@ -24,21 +24,22 @@ export function profileUrl(
   return `${IMAGE_BASE}/${size}${path}`
 }
 
-export function toSlug(title: string, releaseDate: string, imdbId: string): string {
-  const year = releaseDate?.slice(0, 4) ?? ''
-  const kebab = title
+export function toSlug(movie: { title: string; release_date: string; id: number }): string {
+  const year = movie.release_date?.slice(0, 4)
+  const kebab = movie.title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
-  return `${kebab}-${year}-${imdbId}`
+  return year ? `${kebab}-${year}-${movie.id}` : `${kebab}-${movie.id}`
 }
 
-// Extracts imdb_id from slug — imdb_id always matches tt\d+
-export function parseSlug(slug: string): { imdbId: string } | null {
-  const match = slug.match(/(tt\d+)$/)
-  if (!match) return null
-  return { imdbId: match[1] }
+// Extracts tmdb_id from slug — always the last hyphen-separated segment
+export function parseSlug(slug: string): { tmdbId: number } | null {
+  const parts = slug.split('-')
+  const tmdbId = parseInt(parts[parts.length - 1], 10)
+  if (!Number.isInteger(tmdbId) || tmdbId <= 0) return null
+  return { tmdbId }
 }
 
 export function logoUrl(

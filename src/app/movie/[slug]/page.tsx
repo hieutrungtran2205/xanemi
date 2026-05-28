@@ -7,7 +7,7 @@ import {
   getMovieWatchProviders,
   getMovieSimilar,
 } from "@/lib/tmdb/endpoints";
-import { profileUrl } from "@/lib/tmdb/utils";
+import { parseSlug, profileUrl } from "@/lib/tmdb/utils";
 import { MovieHero } from "@/components/movie/movie-hero";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
@@ -23,8 +23,9 @@ interface PageProps {
 
 export default async function MoviePage({ params }: PageProps) {
   const { slug } = await params;
-  const tmdbId = Number(slug);
-  if (!Number.isInteger(tmdbId) || tmdbId <= 0) notFound();
+  const parsed = parseSlug(slug);
+  if (!parsed) notFound();
+  const { tmdbId } = parsed;
 
   const [movie, credits, videos, watchProviders, similar] = await Promise.all([
     getMovieDetail(tmdbId).catch(() => null),
