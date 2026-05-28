@@ -95,6 +95,7 @@ export function FilterControls({ genres, local, setLocal }: FilterControlsProps)
           step={0.5}
           value={[local.minRating]}
           onValueChange={([v]) => setLocal((p) => ({ ...p, minRating: v }))}
+          className="**:data-[slot=slider-track]:h-2 **:data-[slot=slider-thumb]:size-4"
         />
         <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
           <span>Any</span>

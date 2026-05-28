@@ -1,5 +1,5 @@
 import { MovieGridSkeleton } from '@/components/movie/movie-grid'
-import { FilterPanelSkeleton } from '@/components/filter/filter-panel'
+import { FilterPanelSkeleton } from '@/components/filter/filter-panel-skeleton'
 import { PageHeader } from '@/components/layout/page-header'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PageShell } from '@/components/layout/page-shell'
