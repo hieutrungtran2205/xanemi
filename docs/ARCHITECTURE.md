@@ -46,7 +46,7 @@ External:
 - Trending movies section
 - Movie detail (synopsis, cast, trailer, watch providers, similar)
 - Filter V1 (genre, year, rating, sort, language) — tại `/discover`, không phải mood pages
-- Search by title — global search bar trong header, navigate tới `/discover?q=`
+- Search by title — global search bar trong header với autocomplete dropdown (5 preview items + "See more"), submit/See-more navigate tới `/discover?q=`
 - Auth (Google OAuth)
 - Watchlist (add/remove)
 - Watched + rating (1-10)
@@ -125,6 +125,7 @@ External:
 **Decision**: Search (`/search/movie`) và filter (`/discover/movie`) là 2 mode riêng tại `/discover`. Khi có `?q=`, ẩn filter panel và dùng search endpoint. Không cho phép combine.
 **Why**: TMDB API giới hạn cứng — `/search/movie` không nhận genre/rating/sort params; `/discover/movie` không nhận text query. Không thể combine ở server, combine ở client tạo UX giả và kết quả sai.
 **Trade-off**: User không thể vừa search tên vừa filter genre cùng lúc.
+**Autocomplete (header)**: Search bar có dropdown preview 5 results qua route handler `/api/search/movies` (proxy `searchMovies()` server-only). Debounce 500ms + `AbortController`. "See more" / Enter không highlight → push `/discover?q=`. Bar mirror URL `?q=` qua render-time sync (`urlQ !== prevUrlQ`) — clear link reset bar tự động.
 
 ### ADR-012: Feature-sliced development
 **Decision**: Build theo vertical slices 1-4h mỗi cái. Mỗi slice: plan -> code -> review -> test -> commit -> roadmap update.

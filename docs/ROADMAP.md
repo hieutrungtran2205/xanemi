@@ -186,9 +186,25 @@ Cho phép click cast/director ở movie detail → trang chi tiết về ngườ
 - Pull quote chỉ render khi câu đầu bio có 40–220 ký tự và không phải toàn bộ bio.
 - Backdrop fallback `bg-surface` plain khi không credit nào có backdrop.
 
+## Search Autocomplete (hoàn thành) ✅
+
+Header search bar mở rộng từ submit-only thành autocomplete dropdown — preview tối đa 5 phim, "See more" delegate sang `/discover?q=`.
+
+- [x] `app/api/search/movies/route.ts` — route handler proxy `searchMovies()` (server-only) để client fetch. Trả 5 results đầu + `total_results`. Guard `q < 2` trả mảng rỗng.
+- [x] `components/layout/search-bar.tsx` — refactor: debounce 500ms, `AbortController` cancel inflight, dropdown states (hint < 2 chars / skeleton / empty / list + "See more N+").
+- [x] Keyboard nav: Arrow Up/Down highlight, Enter chọn highlight hoặc fallback submit `/discover?q=`, Escape đóng.
+- [x] Click-outside `mousedown` listener + `focused || isOpen` giữ form expanded khi tương tác dropdown.
+- [x] URL sync: `useSearchParams` + `if (urlQ !== prevUrlQ) setQ(urlQ)` (render-time pattern, không cascading) → "clear search" link ở `/discover` reset luôn bar.
+- [x] Item dùng `<Link>` để Next prefetch movie pages.
+- [x] `posterUrl` mở rộng size union: thêm `w92 | w154 | w185` cho thumbnail use cases.
+
+**Hidden behaviors**:
+- Bar value mirror URL `?q=`: navigate sang trang không có `?q=` (e.g. movie detail sau khi click result) cũng clear bar — UX phổ biến.
+- Stale results giữ lại khi user gõ tiếp (chưa qua debounce) thay vì clear ngay → tránh flicker; fetch mới setLoading(true) → skeleton overrides.
+- `controller.signal.aborted` check ở finally tránh setState sau khi unmount/abort.
+
 ## Week 4+: Post-MVP ⬜
 
-- [ ] Search page (TMDB search API)
 - [ ] Loading skeletons polish
 - [ ] TV series support
 - [ ] Comment system
