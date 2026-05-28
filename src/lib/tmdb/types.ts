@@ -81,3 +81,30 @@ export interface WatchProvidersResponse {
   id: number
   results: Partial<Record<string, WatchProvidersRegion>>
 }
+
+export interface PersonBase {
+  id: number
+  name: string
+  profile_path: string | null
+}
+
+export interface PersonDetail extends PersonBase {
+  biography: string
+  birthday: string | null
+  deathday: string | null
+  place_of_birth: string | null
+  known_for_department: string | null
+  also_known_as: string[]
+  popularity: number
+}
+
+export interface PersonMovieCastCredit extends Movie {
+  character: string
+  credit_id: string
+  order: number
+}
+
+export interface PersonMovieCredits {
+  id: number
+  cast: PersonMovieCastCredit[]
+}

@@ -16,7 +16,7 @@ export function MovieCard({ movie, priority = false }: Props) {
 
   return (
     <Link href={`/movie/${toSlug(movie)}`} className="group block">
-      <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-surface">
+      <div className="relative aspect-2/3 overflow-hidden rounded-lg bg-surface">
         {poster ? (
           <Image
             src={poster}

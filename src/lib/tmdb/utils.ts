@@ -34,6 +34,15 @@ export function toSlug(movie: { title: string; release_date: string; id: number 
   return year ? `${kebab}-${year}-${movie.id}` : `${kebab}-${movie.id}`
 }
 
+export function toPersonSlug(person: { name: string; id: number }): string {
+  const kebab = person.name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+  return `${kebab}-${person.id}`
+}
+
 // Extracts tmdb_id from slug — always the last hyphen-separated segment
 export function parseSlug(slug: string): { tmdbId: number } | null {
   const parts = slug.split('-')
@@ -57,4 +66,37 @@ export function formatRating(voteAverage: number): string {
 
 export function releaseYear(dateString: string): string {
   return dateString?.slice(0, 4) ?? ''
+}
+
+export function formatDate(dateString: string | null): string | null {
+  if (!dateString) return null
+  const d = new Date(dateString)
+  if (isNaN(d.getTime())) return null
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+// Returns age in whole years between two ISO dates (YYYY-MM-DD). End defaults to today.
+export function calcAge(birthday: string | null, deathday: string | null = null): number | null {
+  if (!birthday) return null
+  const birth = new Date(birthday)
+  const end = deathday ? new Date(deathday) : new Date()
+  if (isNaN(birth.getTime()) || isNaN(end.getTime())) return null
+  let age = end.getFullYear() - birth.getFullYear()
+  const m = end.getMonth() - birth.getMonth()
+  if (m < 0 || (m === 0 && end.getDate() < birth.getDate())) age--
+  return age >= 0 ? age : null
+}
+
+// Extracts the first sentence from a paragraph for use as a pull quote.
+// Returns null when there's no clean separation (no terminator, single-sentence
+// bio, or the sentence is too short/long to feel intentional).
+export function extractFirstSentence(text: string): string | null {
+  const trimmed = text.trim()
+  if (!trimmed) return null
+  const match = trimmed.match(/^[^.!?]+[.!?]/)
+  if (!match) return null
+  const first = match[0].trim()
+  if (first.length < 40 || first.length > 220) return null
+  if (first.length >= trimmed.length - 1) return null
+  return first
 }

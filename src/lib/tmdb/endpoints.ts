@@ -1,5 +1,15 @@
 import { tmdbFetch } from './client'
-import type { Credits, Genre, Movie, MovieDetail, TMDBResponse, VideosResponse, WatchProvidersResponse } from './types'
+import type {
+  Credits,
+  Genre,
+  Movie,
+  MovieDetail,
+  PersonDetail,
+  PersonMovieCredits,
+  TMDBResponse,
+  VideosResponse,
+  WatchProvidersResponse,
+} from './types'
 import type { FilterParams } from '../filters/types'
 import { buildDiscoverQuery } from '../filters/query-builder'
 
@@ -66,6 +76,20 @@ export async function getMovieWatchProviders(tmdbId: number) {
 
 export async function getMovieSimilar(tmdbId: number) {
   return fetchMovieResource<TMDBResponse<Movie>>(tmdbId, 'similar')
+}
+
+function fetchPersonResource<T>(tmdbId: number, subPath: string): Promise<T> {
+  return tmdbFetch<T>(`/person/${tmdbId}${subPath ? `/${subPath}` : ''}`, {
+    next: { revalidate: 86400, tags: [`person-${tmdbId}`] },
+  })
+}
+
+export async function getPersonDetail(tmdbId: number) {
+  return fetchPersonResource<PersonDetail>(tmdbId, '')
+}
+
+export async function getPersonMovieCredits(tmdbId: number) {
+  return fetchPersonResource<PersonMovieCredits>(tmdbId, 'movie_credits')
 }
 
 export async function tmdbList<T>(

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getMovieDetail,
@@ -7,7 +8,7 @@ import {
   getMovieWatchProviders,
   getMovieSimilar,
 } from "@/lib/tmdb/endpoints";
-import { parseSlug, profileUrl } from "@/lib/tmdb/utils";
+import { parseSlug, profileUrl, toPersonSlug } from "@/lib/tmdb/utils";
 import { MovieHero } from "@/components/movie/movie-hero";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
@@ -91,7 +92,11 @@ export default async function MoviePage({ params }: PageProps) {
               {cast.map((member) => {
                 const photo = profileUrl(member.profile_path, "w185");
                 return (
-                  <div key={member.id} className="flex flex-col gap-1.5">
+                  <Link
+                    key={member.id}
+                    href={`/person/${toPersonSlug(member)}`}
+                    className="group flex flex-col gap-1.5"
+                  >
                     <div className="relative aspect-2/3 overflow-hidden rounded-lg bg-surface">
                       {photo ? (
                         <Image
@@ -99,7 +104,7 @@ export default async function MoviePage({ params }: PageProps) {
                           alt={member.name}
                           fill
                           sizes="(max-width: 640px) 20vw, (max-width: 768px) 14vw, 10vw"
-                          className="object-cover"
+                          className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
@@ -113,7 +118,7 @@ export default async function MoviePage({ params }: PageProps) {
                     <p className="truncate text-xs leading-tight text-muted-foreground">
                       {member.character}
                     </p>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
