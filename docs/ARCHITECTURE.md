@@ -201,6 +201,7 @@ MOOD_LOG:  id, userId(nullable), sessionId, mood, resultTmdbIds(jsonb), clickedT
 | Endpoint | Revalidate | Tag |
 |---|---|---|
 | Movie detail | 24h | `movie-{id}` |
+| Person detail + movie_credits | 24h | `person-{id}` |
 | Discover (mood) | 1h | `mood-{moodId}` |
 | Trending | 1h | `trending` |
 | Search (`/search/movie`) | 1h | none |
@@ -216,14 +217,17 @@ MOOD_LOG:  id, userId(nullable), sessionId, mood, resultTmdbIds(jsonb), clickedT
 /                          Landing (mood picker + trending + filter panel → navigate)
 /discover                  Browse/filter page (genre, year, rating, sort, lang) + search by title
 /discover/[mood]           Mood result (hero + grid + pagination, no filter)
-/movie/[slug]              Movie detail
+/movie/[slug]              Movie detail (cast + director cards link → /person)
+/person/[slug]             Person detail (bio + Known For + filmography)
 /trending                  Hot now
 /(user)/watchlist          Private
 /(user)/watched            Private
 /login                     Auth
 ```
 
-URL slug: `{kebab-title}-{year}-{imdb_id}` — human-readable + imdb_id để resolve.
+URL slug:
+- Movie: `{kebab-title}-{year}-{tmdb_id}` — VD `inception-2010-27205`.
+- Person: `{kebab-name}-{tmdb_id}` — VD `christopher-nolan-525`. Không có year vì person không có release_date. `parseSlug` chung cho cả 2 (lấy `tmdb_id` từ segment cuối).
 
 ## SEO Strategy
 
