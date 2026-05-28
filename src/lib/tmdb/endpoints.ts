@@ -42,34 +42,30 @@ export async function getTrending(timeWindow: 'day' | 'week' = 'week', page = 1)
   )
 }
 
-export async function getMovieDetail(tmdbId: number) {
-  return tmdbFetch<MovieDetail>(`/movie/${tmdbId}`, {
+function fetchMovieResource<T>(tmdbId: number, subPath: string): Promise<T> {
+  return tmdbFetch<T>(`/movie/${tmdbId}${subPath ? `/${subPath}` : ''}`, {
     next: { revalidate: 86400, tags: [`movie-${tmdbId}`] },
   })
+}
+
+export async function getMovieDetail(tmdbId: number) {
+  return fetchMovieResource<MovieDetail>(tmdbId, '')
 }
 
 export async function getMovieCredits(tmdbId: number) {
-  return tmdbFetch<Credits>(`/movie/${tmdbId}/credits`, {
-    next: { revalidate: 86400, tags: [`movie-${tmdbId}`] },
-  })
+  return fetchMovieResource<Credits>(tmdbId, 'credits')
 }
 
 export async function getMovieVideos(tmdbId: number) {
-  return tmdbFetch<VideosResponse>(`/movie/${tmdbId}/videos`, {
-    next: { revalidate: 86400, tags: [`movie-${tmdbId}`] },
-  })
+  return fetchMovieResource<VideosResponse>(tmdbId, 'videos')
 }
 
 export async function getMovieWatchProviders(tmdbId: number) {
-  return tmdbFetch<WatchProvidersResponse>(`/movie/${tmdbId}/watch/providers`, {
-    next: { revalidate: 86400, tags: [`movie-${tmdbId}`] },
-  })
+  return fetchMovieResource<WatchProvidersResponse>(tmdbId, 'watch/providers')
 }
 
 export async function getMovieSimilar(tmdbId: number) {
-  return tmdbFetch<TMDBResponse<Movie>>(`/movie/${tmdbId}/similar`, {
-    next: { revalidate: 86400, tags: [`movie-${tmdbId}`] },
-  })
+  return fetchMovieResource<TMDBResponse<Movie>>(tmdbId, 'similar')
 }
 
 export async function getDiscoverMovies(
