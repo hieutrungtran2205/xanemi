@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { backdropUrl, posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { backdropUrl, formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MovieDetail } from "@/lib/tmdb/types";
@@ -19,7 +19,7 @@ export function MovieHero({ movie }: Props) {
   const backdrop = backdropUrl(movie.backdrop_path, "original");
   const poster = posterUrl(movie.poster_path, "w500");
   const year = releaseYear(movie.release_date);
-  const rating = movie.vote_average.toFixed(1);
+  const rating = formatRating(movie.vote_average);
   const runtime = formatRuntime(movie.runtime);
 
   return (

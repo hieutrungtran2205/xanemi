@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { backdropUrl, posterUrl, releaseYear } from "@/lib/tmdb/utils"
+import { backdropUrl, formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils"
 import { Badge } from "@/components/ui/badge"
 import { BackButton } from "@/components/layout/back-button"
 import type { Movie } from "@/lib/tmdb/types"
@@ -15,7 +15,7 @@ export function MoodMovieHero({ movie, mood }: Props) {
   const backdrop = backdropUrl(movie.backdrop_path, "original")
   const poster = posterUrl(movie.poster_path, "w500")
   const year = releaseYear(movie.release_date)
-  const rating = movie.vote_average.toFixed(1)
+  const rating = formatRating(movie.vote_average)
 
   return (
     <div className="relative overflow-hidden">

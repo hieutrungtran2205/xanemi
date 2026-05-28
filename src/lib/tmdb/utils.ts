@@ -41,6 +41,19 @@ export function parseSlug(slug: string): { imdbId: string } | null {
   return { imdbId: match[1] }
 }
 
+export function logoUrl(
+  path: string | null,
+  size: 'w45' | 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'original' = 'w92'
+): string | null {
+  if (!path) return null
+  return `${IMAGE_BASE}/${size}${path}`
+}
+
+export function formatRating(voteAverage: number): string {
+  if (!voteAverage || isNaN(voteAverage)) return '—'
+  return voteAverage.toFixed(1)
+}
+
 export function releaseYear(dateString: string): string {
   return dateString?.slice(0, 4) ?? ''
 }

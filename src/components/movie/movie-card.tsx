@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Movie } from "@/lib/tmdb/types";
 
@@ -12,7 +12,7 @@ interface Props {
 export function MovieCard({ movie, priority = false }: Props) {
   const poster = posterUrl(movie.poster_path, "w500");
   const year = releaseYear(movie.release_date);
-  const rating = movie.vote_average.toFixed(1);
+  const rating = formatRating(movie.vote_average);
 
   return (
     <Link href={`/movie/${movie.id}`} className="group block">

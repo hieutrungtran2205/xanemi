@@ -1,7 +1,6 @@
 import Image from "next/image";
+import { logoUrl } from "@/lib/tmdb/utils";
 import type { WatchProvidersRegion } from "@/lib/tmdb/types";
-
-const IMAGE_BASE = "https://image.tmdb.org/t/p/w92";
 
 interface Props {
   providers: WatchProvidersRegion;
@@ -28,7 +27,7 @@ function ProviderGroup({
             className="relative h-9 w-9 overflow-hidden rounded-md"
           >
             <Image
-              src={`${IMAGE_BASE}${p.logo_path}`}
+              src={logoUrl(p.logo_path, 'w92') ?? ''}
               alt={p.provider_name}
               fill
               sizes="36px"
