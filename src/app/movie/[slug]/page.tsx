@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getMovieDetail,
@@ -8,7 +6,7 @@ import {
   getMovieWatchProviders,
   getMovieSimilar,
 } from "@/lib/tmdb/endpoints";
-import { parseSlug, profileUrl, toPersonSlug } from "@/lib/tmdb/utils";
+import { parseSlug } from "@/lib/tmdb/utils";
 import { MovieHero } from "@/components/movie/movie-hero";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
@@ -17,6 +15,7 @@ import { BackButton } from "@/components/layout/back-button";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
+import { PersonCreditCard } from "@/components/person/person-credit-card";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -39,6 +38,7 @@ export default async function MoviePage({ params }: PageProps) {
   if (!movie) notFound();
 
   const cast = credits?.cast.slice(0, 10) ?? [];
+  const directors = credits?.crew.filter((c) => c.job === "Director") ?? [];
 
   // Prefer official YouTube trailer, fall back to any YouTube trailer
   const trailer =
@@ -85,42 +85,38 @@ export default async function MoviePage({ params }: PageProps) {
           </section>
         )}
 
+        {directors.length > 0 && (
+          <section className="mb-12">
+            <SectionHeading
+              title={directors.length > 1 ? "Directors" : "Director"}
+            />
+            <div className="grid grid-cols-5 gap-3 sm:grid-cols-7 md:grid-cols-8 lg:grid-cols-10">
+              {directors.map((d) => (
+                <PersonCreditCard
+                  key={d.credit_id}
+                  id={d.id}
+                  name={d.name}
+                  profilePath={d.profile_path}
+                  role={d.job}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {cast.length > 0 && (
           <section className="mb-12">
             <SectionHeading title="Cast" />
             <div className="grid grid-cols-5 gap-3 sm:grid-cols-7 md:grid-cols-8 lg:grid-cols-10">
-              {cast.map((member) => {
-                const photo = profileUrl(member.profile_path, "w185");
-                return (
-                  <Link
-                    key={member.id}
-                    href={`/person/${toPersonSlug(member)}`}
-                    className="group flex flex-col gap-1.5"
-                  >
-                    <div className="relative aspect-2/3 overflow-hidden rounded-lg bg-surface">
-                      {photo ? (
-                        <Image
-                          src={photo}
-                          alt={member.name}
-                          fill
-                          sizes="(max-width: 640px) 20vw, (max-width: 768px) 14vw, 10vw"
-                          className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02]"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
-                          —
-                        </div>
-                      )}
-                    </div>
-                    <p className="truncate text-xs font-semibold leading-tight text-foreground">
-                      {member.name}
-                    </p>
-                    <p className="truncate text-xs leading-tight text-muted-foreground">
-                      {member.character}
-                    </p>
-                  </Link>
-                );
-              })}
+              {cast.map((member) => (
+                <PersonCreditCard
+                  key={member.id}
+                  id={member.id}
+                  name={member.name}
+                  profilePath={member.profile_path}
+                  role={member.character}
+                />
+              ))}
             </div>
           </section>
         )}

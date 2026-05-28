@@ -39,9 +39,19 @@ export interface CastMember {
   order: number
 }
 
+export interface CrewMember {
+  id: number
+  name: string
+  job: string
+  department: string
+  profile_path: string | null
+  credit_id: string
+}
+
 export interface Credits {
   id: number
   cast: CastMember[]
+  crew: CrewMember[]
 }
 
 export interface TMDBResponse<T> {
