@@ -68,19 +68,31 @@ export async function getMovieSimilar(tmdbId: number) {
   return fetchMovieResource<TMDBResponse<Movie>>(tmdbId, 'similar')
 }
 
+export async function tmdbList<T>(
+  path: string,
+  params: Record<string, string | number | undefined>,
+  options?: { tag?: string; revalidate?: number }
+): Promise<TMDBResponse<T>> {
+  const qs = new URLSearchParams(
+    Object.entries(params)
+      .filter((entry): entry is [string, string | number] => entry[1] !== undefined)
+      .map(([k, v]) => [k, String(v)])
+  ).toString()
+  return tmdbFetch<TMDBResponse<T>>(`${path}?${qs}`, {
+    next: {
+      revalidate: options?.revalidate ?? 3600,
+      tags: options?.tag ? [options.tag] : [],
+    },
+  })
+}
+
 export async function getDiscoverMovies(
   filters: FilterParams,
   page: number
 ): Promise<TMDBResponse<Movie>> {
-  const params = buildDiscoverQuery(filters, page)
-  return tmdbFetch<TMDBResponse<Movie>>(`/discover/movie?${new URLSearchParams(params)}`, {
-    next: { revalidate: 3600, tags: ['discover'] },
-  })
+  return tmdbList<Movie>('/discover/movie', buildDiscoverQuery(filters, page), { tag: 'discover' })
 }
 
 export async function searchMovies(query: string, page: number): Promise<TMDBResponse<Movie>> {
-  const params = new URLSearchParams({ query, page: String(page), include_adult: 'false' })
-  return tmdbFetch<TMDBResponse<Movie>>(`/search/movie?${params}`, {
-    next: { revalidate: 3600, tags: ['search'] },
-  })
+  return tmdbList<Movie>('/search/movie', { query, page, include_adult: 'false' }, { tag: 'search' })
 }

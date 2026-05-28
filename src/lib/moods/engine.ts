@@ -1,5 +1,5 @@
 import 'server-only'
-import { tmdbFetch } from '../tmdb/client'
+import { tmdbList } from '../tmdb/endpoints'
 import type { Movie, TMDBResponse } from '../tmdb/types'
 import { MOOD_DEFINITIONS } from './definitions'
 import type { MoodId } from './types'
@@ -21,9 +21,5 @@ export async function getMoviesByMood(
   const resolvedFilters = filters ?? DEFAULT_FILTERS
 
   const params = buildQueryWithFilters(mood, resolvedFilters, resolvedPage)
-  const qs = new URLSearchParams(params).toString()
-
-  return tmdbFetch<TMDBResponse<Movie>>(`/discover/movie?${qs}`, {
-    next: { revalidate: 3600, tags: [`mood-${moodId}`] },
-  })
+  return tmdbList<Movie>('/discover/movie', params, { tag: `mood-${moodId}` })
 }
