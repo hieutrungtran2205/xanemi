@@ -162,6 +162,22 @@ External:
 
 **Trade-off**: Mỗi lần đổi trang là full server round-trip (không smooth như client-side). Chấp nhận được vì data phim ít thay đổi và được cache.
 
+### ADR-017: Mood engine delegates TMDB fetch via wrapper (not co-located)
+
+**Context:**
+3 list-query functions shared the same fetch pattern: getDiscoverMovies and searchMovies (in lib/tmdb/endpoints.ts) and getMoviesByMood (in lib/moods/engine.ts). Two options to dedupe:
+- Option 1: expose a tmdbList<T>() wrapper in lib/tmdb; mood engine imports and calls it.
+- Option 2: move getMoviesByMood into lib/tmdb/endpoints.ts so all three share the wrapper locally.
+
+**Decision:**
+Option 1. tmdbList<T>(path, params, options?) lives in lib/tmdb/endpoints.ts. lib/moods/engine.ts keeps its mood→params logic and delegates the fetch to tmdbList.
+
+**Consequences:**
+- (+) Clean boundary: lib/tmdb owns fetch + cache; lib/moods owns mood→params translation.
+- (+) Adding new list-style queries (search variations, filtered discover) reuses tmdbList without touching mood code.
+- (+) Mood engine can later add cross-cutting logic (filter merging, fallback moods) without polluting endpoints.ts.
+- (−) One extra import hop (mood engine → tmdbList) vs. co-location.
+
 ## Data Model (implement Week 3)
 
 Movie-only, không có `mediaType` field.
