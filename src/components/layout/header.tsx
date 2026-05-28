@@ -3,6 +3,7 @@ import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
 import { Container } from "./container";
 import { Button } from "@/components/ui/button";
+import { MobileNav } from "./mobile-nav";
 
 export function Header() {
   return (
@@ -24,10 +25,11 @@ export function Header() {
           >
             Trending
           </Link>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="hidden sm:inline-flex">
             Sign in
           </Button>
         </nav>
+        <MobileNav />
       </Container>
     </header>
   );
