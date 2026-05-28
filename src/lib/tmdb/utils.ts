@@ -86,17 +86,3 @@ export function calcAge(birthday: string | null, deathday: string | null = null)
   if (m < 0 || (m === 0 && end.getDate() < birth.getDate())) age--
   return age >= 0 ? age : null
 }
-
-// Extracts the first sentence from a paragraph for use as a pull quote.
-// Returns null when there's no clean separation (no terminator, single-sentence
-// bio, or the sentence is too short/long to feel intentional).
-export function extractFirstSentence(text: string): string | null {
-  const trimmed = text.trim()
-  if (!trimmed) return null
-  const match = trimmed.match(/^[^.!?]+[.!?]/)
-  if (!match) return null
-  const first = match[0].trim()
-  if (first.length < 40 || first.length > 220) return null
-  if (first.length >= trimmed.length - 1) return null
-  return first
-}

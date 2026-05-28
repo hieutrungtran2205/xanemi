@@ -173,9 +173,9 @@ Cho phép click cast/director ở movie detail → trang chi tiết về ngườ
 - [x] Types: `PersonDetail`, `PersonMovieCastCredit` (extends `Movie` + `character`), `PersonMovieCredits`, `CrewMember`. `Credits` mở rộng để có `crew`.
 - [x] Endpoints: `getPersonDetail`, `getPersonMovieCredits` qua `fetchPersonResource` (revalidate 86400, tag `person-${id}`).
 - [x] Slug person: `toPersonSlug({name, id})` → `{kebab-name}-{tmdb_id}` (không year). `parseSlug` reuse được vì lấy tmdb_id từ segment cuối.
-- [x] Helpers: `formatDate`, `calcAge` (hỗ trợ deathday), `extractFirstSentence` (pull quote).
+- [x] Helpers: `formatDate`, `calcAge` (hỗ trợ deathday).
 - [x] `app/person/[slug]/page.tsx` — Server Component. Logic: dedupe credits theo `id`, sort filmography theo `release_date` desc, pick Known For top 6 popularity, pick hero backdrop từ phim popularity cao nhất.
-- [x] `components/person/person-hero.tsx` — backdrop cinematic + photo overlap + name lớn + facts inline + pull quote (blockquote border-left).
+- [x] `components/person/person-hero.tsx` — backdrop cinematic + photo overlap + name lớn + facts inline.
 - [x] `components/person/biography-text.tsx` — client component, line-clamp-6 + toggle Read more.
 - [x] `components/person/person-credit-card.tsx` — card reusable (photo + name + role), dùng cho cả cast lẫn director ở movie detail.
 - [x] `app/person/[slug]/loading.tsx` + `PersonHeroSkeleton` — skeleton match layout.
@@ -183,7 +183,7 @@ Cho phép click cast/director ở movie detail → trang chi tiết về ngườ
 
 **Hidden behaviors**:
 - Known For chỉ render khi filmography ≥ 15 phim (`KNOWN_FOR_MIN_FILMOGRAPHY`) — tránh duplicate cards cho actor mới.
-- Pull quote chỉ render khi câu đầu bio có 40–220 ký tự và không phải toàn bộ bio.
+
 - Backdrop fallback `bg-surface` plain khi không credit nào có backdrop.
 
 ## Search Autocomplete (hoàn thành) ✅

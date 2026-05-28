@@ -2,7 +2,6 @@ import Image from "next/image";
 import {
   backdropUrl,
   calcAge,
-  extractFirstSentence,
   formatDate,
   profileUrl,
 } from "@/lib/tmdb/utils";
@@ -24,10 +23,6 @@ export function PersonHero({ person, backdropPath }: Props) {
   const born = formatDate(person.birthday);
   const died = formatDate(person.deathday);
   const age = calcAge(person.birthday, person.deathday);
-  const pullQuote = person.biography
-    ? extractFirstSentence(person.biography)
-    : null;
-
   const facts: string[] = [];
   if (born) facts.push(`Born ${born}`);
   if (died) facts.push(`Died ${died}${age !== null ? ` (age ${age})` : ""}`);
@@ -97,12 +92,6 @@ export function PersonHero({ person, backdropPath }: Props) {
               )}
             </div>
           </div>
-
-          {pullQuote && (
-            <blockquote className="mt-12 max-w-2xl border-l-2 border-border pl-6 font-heading text-lg italic leading-relaxed text-foreground/90 md:text-xl">
-              {pullQuote}
-            </blockquote>
-          )}
 
           {person.biography && (
             <section className="mt-12 max-w-3xl">
