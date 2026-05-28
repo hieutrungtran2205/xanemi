@@ -33,11 +33,15 @@ Project này build theo **feature-by-feature (vertical slices)**, KHÔNG generat
 3. **Next.js fetch cache only** (`next: { revalidate, tags }`). KHÔNG manual cache (no Redis, no in-memory).
 4. **Server Component default**. Add `'use client'` CHỈ KHI cần: event handlers, React hooks, browser API.
 5. **Image domain**: `image.tmdb.org` (config trong `next.config.ts`).
-6. **Slug format**: `{kebab-title}-{year}-{imdb_id}` — VD: `inception-2010-tt1375666`.
+6. **Slug format**: `{kebab-title}-{year}-{tmdb_id}` — VD: `inception-2010-27205`. Reason: imdb_id is absent from TMDB list endpoints; tmdb_id is stable and present everywhere.
 7. **No `any`, no `@ts-ignore`**.
 8. **No pirate video**. Video = YouTube trailer + TMDB watch providers only.
 9. **MVP = movie only**. KHÔNG build TV series (defer V2).
 10. **TMDB attribution BẮT BUỘC**: Footer phải có text "This product uses the TMDB API but is not endorsed or certified by TMDB" + logo TMDB. Đây là yêu cầu bắt buộc của TMDB terms — không được bỏ.
+11. **Mapping helpers**: Before inlining TMDB field formatting in a component (image URLs, vote_average, release_date, runtime, etc.), check `lib/tmdb/utils.ts` for a helper. None exists → add it there first. Do NOT inline in JSX.
+12. **Movie links**: Every `/movie/...` link goes through `toSlug(movie)`. Never hardcode `/movie/${id}`.
+13. **TMDB types**: Before adding a TMDB type, check `lib/tmdb/types.ts`. If it shares fields with an existing type, compose via `extends`/`&` from `MovieBase` (or the right base) — do NOT copy fields.
+14. **Fetch helpers**: All TMDB calls go through `lib/tmdb/client.ts` (no direct `fetch()`). New per-movie resource → use `fetchMovieResource()`. New list query → use `tmdbList()`. Cache values live in those helpers only (per-movie: revalidate 86400, tag `movie-${id}`; list: revalidate 3600) — do not re-declare per endpoint.
 
 ## Naming Conventions
 
