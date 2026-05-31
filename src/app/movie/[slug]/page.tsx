@@ -11,7 +11,6 @@ import { MovieHero } from "@/components/movie/movie-hero";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
 import { WatchProviders } from "@/components/movie/watch-providers";
-import { BackButton } from "@/components/layout/back-button";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
@@ -50,12 +49,7 @@ export default async function MoviePage({ params }: PageProps) {
 
   return (
     <PageShell>
-      <div className="relative">
-        <div className="absolute left-4 top-4 z-10 sm:left-8 sm:top-6">
-          <BackButton />
-        </div>
-        <MovieHero movie={movie} />
-      </div>
+      <MovieHero movie={movie} />
 
       <Container className="py-12">
         <div className="mb-12 flex flex-col gap-10 lg:flex-row lg:gap-16">
