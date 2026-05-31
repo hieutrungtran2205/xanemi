@@ -49,7 +49,7 @@ export function WatchProviders({ providers }: Props) {
   if (!hasAny) return null;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-wrap gap-x-10 gap-y-4">
       <ProviderGroup label="Stream" items={providers.flatrate} />
       <ProviderGroup label="Rent" items={providers.rent} />
       <ProviderGroup label="Buy" items={providers.buy} />

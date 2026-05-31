@@ -29,12 +29,12 @@ export function Pagination({ page, totalPages }: Props) {
     'page',
     parseAsInteger.withDefault(1).withOptions({ shallow: false, clearOnDefault: true, scroll: false }),
   )
-  const [inputVal, setInputVal] = useState(String(page))
+  const [inputVal, setInputVal] = useState('')
   const [syncedPage, setSyncedPage] = useState(page)
 
   if (syncedPage !== page) {
     setSyncedPage(page)
-    setInputVal(String(page))
+    setInputVal('')
   }
 
   if (totalPages <= 1) return null

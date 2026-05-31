@@ -52,23 +52,14 @@ export default async function MoviePage({ params }: PageProps) {
       <MovieHero movie={movie} />
 
       <Container className="py-12">
-        <div className="mb-12 flex flex-col gap-10 lg:flex-row lg:gap-16">
-          {movie.overview && (
-            <section className="min-w-0 flex-1">
-              <SectionHeading title="Synopsis" />
-              <p className="text-base leading-relaxed text-muted-foreground">
-                {movie.overview}
-              </p>
-            </section>
-          )}
-
-          {usProviders && (
-            <section className="lg:w-52 lg:shrink-0">
-              <SectionHeading title="Where to Watch" />
-              <WatchProviders providers={usProviders} />
-            </section>
-          )}
-        </div>
+        {movie.overview && (
+          <section className="mb-12 max-w-3xl">
+            <SectionHeading title="Synopsis" />
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {movie.overview}
+            </p>
+          </section>
+        )}
 
         {trailer && (
           <section className="mb-12">
@@ -112,6 +103,13 @@ export default async function MoviePage({ params }: PageProps) {
                 />
               ))}
             </div>
+          </section>
+        )}
+
+        {usProviders && (
+          <section className="mb-12">
+            <SectionHeading title="Where to Watch" />
+            <WatchProviders providers={usProviders} />
           </section>
         )}
 

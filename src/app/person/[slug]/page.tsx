@@ -8,7 +8,6 @@ import type { Movie, PersonMovieCastCredit } from "@/lib/tmdb/types";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
-import { BackButton } from "@/components/layout/back-button";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { PersonHero } from "@/components/person/person-hero";
 
@@ -83,12 +82,7 @@ export default async function PersonPage({ params }: PageProps) {
 
   return (
     <PageShell>
-      <div className="relative">
-        <div className="absolute left-4 top-4 z-10 sm:left-8 sm:top-6">
-          <BackButton />
-        </div>
-        <PersonHero person={person} backdropPath={heroBackdrop} />
-      </div>
+      <PersonHero person={person} backdropPath={heroBackdrop} />
 
       <Container className="py-12">
         {knownFor.length > 0 && (

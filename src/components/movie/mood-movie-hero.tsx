@@ -2,7 +2,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { backdropUrl, formatRating, posterUrl, releaseYear, toSlug } from "@/lib/tmdb/utils"
 import { Badge } from "@/components/ui/badge"
-import { BackButton } from "@/components/layout/back-button"
 import type { Movie } from "@/lib/tmdb/types"
 import type { MoodDefinition } from "@/lib/moods/types"
 
@@ -33,9 +32,6 @@ export function MoodMovieHero({ movie, mood }: Props) {
         )}
         <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 via-40% to-transparent" />
         <div className="absolute inset-0 bg-linear-to-r from-background/80 via-transparent to-transparent" />
-        <div className="absolute left-4 top-4 z-10 sm:left-8 sm:top-6">
-          <BackButton />
-        </div>
       </div>
 
       {/* Content overlapping bottom of backdrop */}
