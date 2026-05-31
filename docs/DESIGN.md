@@ -161,19 +161,35 @@ KHÔNG dùng image/SVG logo trong MVP.
 - rounded-md, p-4
 ```
 
-### Hero Banner (Landing)
+### Hero Slider (Landing)
+
+> Landing mở đầu bằng **slider banner phim trending** (không còn mood hero — mood
+> bị deprecate ở home vì trùng vai & nông hơn theme/country). Component:
+> `components/movie/hero-slider.tsx` (Server, fetch data) + `hero-carousel.tsx`
+> (Client, Embla). Carousel primitive: `components/ui/carousel.tsx` (shadcn, KHÔNG sửa tay).
+
 ```
-- Backdrop: 1 ảnh từ trending movies, random pick server-side — KHÔNG carousel,
-  KHÔNG auto-rotate (tránh CLS)
-- Overlay: `bg-black/70` + gradient `from-black/90 via-black/60 to-transparent`
-  từ bottom lên → text readable trên mọi backdrop
-- Height: `70-80vh` desktop / `60vh` mobile — chừa hint trending cuộn xuống
-- H1 "What's your mood tonight?": Space Grotesk, `text-3xl`, font-weight 700, white
-- Subtitle: Inter, `text-muted`, `text-base`, ngay dưới H1
-- MoodPicker (10 chips) đặt ngay trong hero, dưới H1 + subtitle
-- Mood chips trên nền tối: `bg-surface/80` (backdrop thấy nhẹ phía sau),
-  accent khi hover/active
-- KHÔNG animation backdrop, KHÔNG glassmorphism overlay
+- Data: top 5 phim trending CÓ backdrop (lọc null). Genre tên map từ genre_ids
+  qua getGenreList() (fetch song song, cache 30 ngày). Tất cả từ list endpoint —
+  KHÔNG fetch getMovieDetail per-movie (tránh 5 call thừa ở home).
+- Carousel: Embla (shadcn Carousel), MANUAL — mũi tên + dots, loop bật.
+  KHÔNG auto-rotate (bảo vệ LCP/CLS, tránh layout shift bất ngờ).
+- Height: `h-[65vh] min-h-85` (cố định → chống CLS). Skeleton cùng kích thước.
+- Backdrop: size `original`, `object-cover object-top`. CHỈ slide đầu `priority`
+  (LCP element), slide sau lazy.
+- Overlay: 2 gradient — bottom `from-background via-background/30 via-35% to-transparent`
+  + left `from-background/80 via-transparent` → text readable mọi backdrop.
+- Nội dung mỗi slide (align bottom, trong Container, max-w-2xl):
+  · Eyebrow "Trending #N" (text-xs, uppercase, tracking-wide, muted)
+  · Title: `<h2>` Space Grotesk 700, `text-3xl → md:text-5xl`
+  · Meta 1 hàng: `năm · ★rating (vote_count) · genre1 · genre2 · genre3` (≤3 genre)
+  · Overview: `line-clamp-3`, text-sm muted, max-w-xl
+  · Button "View details" (size lg) → `/movie/{slug}` (qua toSlug)
+- Mũi tên: ẩn mobile (`hidden sm:inline-flex`), căn giữa dọc bằng
+  `top-[calc(50%-1rem)] translate-y-0` — KHÔNG dùng `-translate-y-1/2` vì xung đột
+  với `active:translate-y-px` của Button (gây nhảy khi bấm).
+- Dots: bottom-center, active = `w-6 bg-foreground`, idle = `w-1.5 bg-foreground/40`.
+- KHÔNG glassmorphism, KHÔNG backdrop-blur.
 ```
 
 ### MovieHero (detail page)

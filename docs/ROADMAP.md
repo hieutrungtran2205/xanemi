@@ -73,6 +73,7 @@
 **Acceptance**: 10 moods fetch results khác nhau, có variety giữa các lần gọi
 
 ### Slice 1.6: Hero Banner + MoodPicker ⬜
+> ⚠️ **Superseded**: landing hero đổi sang **trending banner slider** (`hero-slider.tsx` + `hero-carousel.tsx`, Embla manual carousel). Xem ADR-018 + DESIGN.md "Hero Slider (Landing)". MoodPicker/hero-banner.tsx giờ orphan, mood vẫn ở `/discover/[mood]`.
 - [ ] `components/mood/mood-chip.tsx` (emoji + label + accent, `bg-surface/80` trong hero)
 - [ ] `components/mood/mood-picker.tsx` (grid 10 chips)
 - [ ] `components/layout/hero-banner.tsx` (backdrop + overlay + H1 + subtitle + MoodPicker)

@@ -154,6 +154,7 @@ External:
 **Trade-off**: Ít differentiation visual so với design cá tính mạnh; cần user actively review output design vì Claude Code không tự biết khi nào làm xấu.
 
 ### ADR-014: No blocking modal — Hero MoodPicker + Mood of the Day
+> ⚠️ **Superseded by [ADR-018]** — landing hero đổi sang trending banner slider, không còn MoodPicker/Mood of the Day. Phần "no blocking modal" vẫn đúng.
 **Context**: Thiết kế ban đầu có modal chọn mood khi vào landing. Phát hiện 2 vấn đề: (1) Google interstitial penalty — modal che content khi tải trang bị coi là intrusive interstitial, ảnh hưởng SEO ranking; (2) First-load friction — user phải dismiss modal trước khi thấy bất kỳ content nào.
 **Decision**: Bỏ blocking modal. Thay bằng hero banner full-width với MoodPicker nhúng trực tiếp. Thêm "Mood of the Day" — highlight 1 mood chip dựa trên giờ trong ngày (static render server-side). Backdrop hero là 1 ảnh trending random — KHÔNG carousel, KHÔNG auto-rotate để tránh CLS.
 **Consequences**:
@@ -195,6 +196,20 @@ Option 1. tmdbList<T>(path, params, options?) lives in lib/tmdb/endpoints.ts. li
 - (+) Mood engine can later add cross-cutting logic (filter merging, fallback moods) without polluting endpoints.ts.
 - (−) One extra import hop (mood engine → tmdbList) vs. co-location.
 
+### ADR-018: Landing hero — Trending banner slider (supersedes ADR-014)
+
+**Context**: Sau khi build `theme` + `country` (định hướng khám phá tốt, có chiều sâu), mood lộ ra **nông và trùng vai** — hero mood ("What's your mood tonight?" + MoodPicker) không còn xứng vị trí dẫn dắt landing, và poster phim thật kéo thị giác mạnh hơn mood chip.
+
+**Decision**: Thay mood hero ở landing bằng **trending banner slider**. `components/movie/hero-slider.tsx` (Server: fetch top 5 trending có backdrop + genre map) + `hero-carousel.tsx` (Client: Embla qua shadcn Carousel). Manual nav (mũi tên + dots, loop) — **vẫn KHÔNG auto-rotate**. Mỗi slide: "Trending #N" + title + meta (năm · ★rating · genres) + overview + nút "View details". Mood KHÔNG bị xoá khỏi app (route `/discover/[mood]` còn nguyên) — chỉ rời khỏi hero.
+
+**Consequences**:
+- (+) Landing "content first" — poster/backdrop phim làm chủ đạo, đúng ADR-013.
+- (+) Theme/country gánh vai trò định hướng; mood hạ xuống vai phụ.
+- (+) Giữ cam kết SEO/CLS của ADR-014: height cố định `h-[65vh]`, chỉ slide đầu `priority` (LCP), manual (không layout shift bất ngờ). Đảo "KHÔNG carousel" của ADR-014 nhưng bù bằng các ràng buộc này.
+- (−) `components/layout/hero-banner.tsx` + `components/mood/mood-picker.tsx` thành **orphan** — defer xoá sang slice "deprecate mood" riêng (feature/refactor tách commit).
+- "Mood of the Day" của ADR-014 không còn ở home.
+- Chi tiết UI: docs/DESIGN.md → "Hero Slider (Landing)".
+
 ## Data Model (implement Week 3)
 
 Movie-only, không có `mediaType` field.
@@ -231,7 +246,7 @@ MOOD_LOG:  id, userId(nullable), sessionId, mood, resultTmdbIds(jsonb), clickedT
 ## Route Structure
 
 ```
-/                          Landing (mood picker + trending + filter panel → navigate)
+/                          Landing (trending hero slider + trending grid + themes + country)
 /discover                  Browse/filter page (genre, year, rating, sort, lang) + search by title
 /discover/[mood]           Mood result (hero + grid + pagination, no filter)
 /movie/[slug]              Movie detail (cast + director cards link → /person)

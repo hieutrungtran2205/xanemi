@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { getTrending } from '@/lib/tmdb/endpoints'
 import { MovieGrid, MovieGridSkeleton } from '@/components/movie/movie-grid'
-import { HeroBanner } from '@/components/layout/hero-banner'
+import { HeroSlider, HeroSliderSkeleton } from '@/components/movie/hero-slider'
 import { PageShell } from '@/components/layout/page-shell'
 import { Container } from '@/components/layout/container'
 import { SectionHeading } from '@/components/layout/section-heading'
@@ -12,13 +12,15 @@ import { COUNTRIES } from '@/lib/countries/definitions'
 
 async function TrendingSection() {
   const data = await getTrending()
-  return <MovieGrid movies={data.results.slice(0, 10)} priority />
+  return <MovieGrid movies={data.results.slice(5, 15)} priority />
 }
 
 export default async function HomePage() {
   return (
     <PageShell>
-      <HeroBanner />
+      <Suspense fallback={<HeroSliderSkeleton />}>
+        <HeroSlider />
+      </Suspense>
 
       <Container>
         <section className="py-16 sm:py-20">
