@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/layout/container'
@@ -93,7 +94,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                         </p>
                       )}
                       <Button asChild size="lg" className="mt-6">
-                        <Link href={`/movie/${slide.slug}`}>View details</Link>
+                        <Link href={`/movie/${slide.slug}`}>View details<ArrowRight /></Link>
                       </Button>
                     </div>
                   </Container>

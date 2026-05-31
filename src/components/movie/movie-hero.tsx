@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { Play } from "lucide-react";
 import { backdropUrl, formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MovieDetail } from "@/lib/tmdb/types";
 
@@ -95,6 +97,19 @@ export function MovieHero({ movie }: Props) {
                 <p className="text-sm italic text-muted-foreground">
                   {movie.tagline}
                 </p>
+              )}
+
+              {movie.imdb_id && (
+                <Button asChild size="lg" className="w-fit">
+                  <a
+                    href={`https://www.playimdb.com/title/${movie.imdb_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Play />
+                    Watch Now
+                  </a>
+                </Button>
               )}
 
               {movie.genres.length > 0 && (

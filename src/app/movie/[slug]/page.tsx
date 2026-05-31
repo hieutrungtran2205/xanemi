@@ -3,14 +3,12 @@ import {
   getMovieDetail,
   getMovieCredits,
   getMovieVideos,
-  getMovieWatchProviders,
   getMovieSimilar,
 } from "@/lib/tmdb/endpoints";
 import { parseSlug } from "@/lib/tmdb/utils";
 import { MovieHero } from "@/components/movie/movie-hero";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
-import { WatchProviders } from "@/components/movie/watch-providers";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
@@ -26,11 +24,10 @@ export default async function MoviePage({ params }: PageProps) {
   if (!parsed) notFound();
   const { tmdbId } = parsed;
 
-  const [movie, credits, videos, watchProviders, similar] = await Promise.all([
+  const [movie, credits, videos, similar] = await Promise.all([
     getMovieDetail(tmdbId).catch(() => null),
     getMovieCredits(tmdbId).catch(() => null),
     getMovieVideos(tmdbId).catch(() => null),
-    getMovieWatchProviders(tmdbId).catch(() => null),
     getMovieSimilar(tmdbId).catch(() => null),
   ]);
 
@@ -45,7 +42,6 @@ export default async function MoviePage({ params }: PageProps) {
       (v) => v.site === "YouTube" && v.type === "Trailer" && v.official
     ) ?? videos?.results.find((v) => v.site === "YouTube" && v.type === "Trailer");
 
-  const usProviders = watchProviders?.results?.["US"] ?? null;
 
   return (
     <PageShell>
@@ -103,13 +99,6 @@ export default async function MoviePage({ params }: PageProps) {
                 />
               ))}
             </div>
-          </section>
-        )}
-
-        {usProviders && (
-          <section className="mb-12">
-            <SectionHeading title="Where to Watch" />
-            <WatchProviders providers={usProviders} />
           </section>
         )}
 
