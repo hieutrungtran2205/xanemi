@@ -120,3 +120,11 @@ export async function getDiscoverMovies(
 export async function searchMovies(query: string, page: number): Promise<TMDBResponse<Movie>> {
   return tmdbList<Movie>('/search/movie', { query, page, include_adult: 'false' }, { tag: 'search' })
 }
+
+export async function getThemeMovies(
+  slug: string,
+  query: Record<string, string | number>,
+  page = 1
+): Promise<TMDBResponse<Movie>> {
+  return tmdbList<Movie>('/discover/movie', { ...query, page }, { tag: `theme-${slug}`, revalidate: 86400 })
+}

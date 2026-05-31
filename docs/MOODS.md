@@ -24,6 +24,17 @@
 | | | 10752 | War |
 | | | 37 | Western |
 
+## Mood vs Theme — Sự khác biệt
+
+| | Mood | Theme |
+|---|---|---|
+| Entry point | Cảm xúc ("muốn thư giãn") | Genre ("muốn xem phim chiến tranh") |
+| Query | Nhiều params: genre + rating + keyword | Chủ yếu genre-based |
+| File | `lib/moods/definitions.ts` | `lib/themes/definitions.ts` |
+| Route | `/discover/[mood]` | `/theme/[slug]` |
+
+Hai hệ thống độc lập, cùng dùng TMDB Discover API, có thể trả về phim trùng nhau — đó là bình thường.
+
 ## 10 Moods v1
 
 ### 1. Cozy & Comforting — emoji 😌 — accent #F59E0B (amber)

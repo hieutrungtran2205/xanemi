@@ -127,6 +127,14 @@ External:
 **Trade-off**: User không thể vừa search tên vừa filter genre cùng lúc.
 **Autocomplete (header)**: Search bar có dropdown preview 5 results qua route handler `/api/search/movies` (proxy `searchMovies()` server-only). Debounce 500ms + `AbortController`. "See more" / Enter không highlight → push `/discover?q=`. Bar mirror URL `?q=` qua render-time sync (`urlQ !== prevUrlQ`) — clear link reset bar tự động.
 
+### ADR-016: Theme system — genre-first discovery lane
+**Decision**: Thêm `/theme/[slug]` song song với `/discover/[mood]`. Themes map trực tiếp tới TMDB genre IDs, moods map tới cảm xúc (nhiều genre + params phức tạp hơn).
+**Why**: Một số user biết rõ muốn xem gì ("muốn xem phim chiến tranh") hơn là cảm xúc ("muốn thư giãn"). Genre-first là UX quen thuộc, dễ onboard.
+**Data**: `lib/themes/definitions.ts` — mảng `THEMES[]` với `slug`, `title`, `description`, `query` (TMDB Discover params). Không có DB, không có state client — hoàn toàn static + server-fetched.
+**Route**: `app/theme/[slug]/page.tsx` dùng chung `getThemeMovies()` endpoint và `ThemeHero` + `MovieGrid` components.
+**Trade-off**: Overlap với mood pages (cùng kết quả nếu mood mapping trùng genre). Chấp nhận — 2 entry point phục vụ 2 mental model khác nhau.
+**Themes hiện tại (12)**: Family Night, Date Night, Mind Benders, Blockbusters, Timeless Classics, Tearjerkers, Laugh Out Loud, Edge of Your Seat, War, Crime & Noir, Horror, Animated.
+
 ### ADR-012: Feature-sliced development
 **Decision**: Build theo vertical slices 1-4h mỗi cái. Mỗi slice: plan -> code -> review -> test -> commit -> roadmap update.
 **Why**: Code reviewable, bug phát hiện sớm, học từng concept, git history clean.
