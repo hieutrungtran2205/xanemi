@@ -8,16 +8,16 @@ export interface CountryDefinition {
 
 export const COUNTRIES: CountryDefinition[] = [
   {
-    slug: 'hollywood',
-    title: 'Hollywood',
-    description: 'Big budgets, bigger stories',
+    slug: 'american',
+    title: 'American Cinema',
+    description: 'Dreams big, spends bigger, delivers every time',
     language: 'en',
     query: {
       with_original_language: 'en',
       with_origin_country: 'US',
       'vote_average.gte': 7.0,
       'vote_count.gte': 5000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -27,11 +27,10 @@ export const COUNTRIES: CountryDefinition[] = [
     description: 'Dry wit, class tension, and quiet devastation',
     language: 'en',
     query: {
-      with_original_language: 'en',
       with_origin_country: 'GB',
       'vote_average.gte': 6.5,
       'vote_count.gte': 1000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -44,7 +43,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'ko',
       'vote_average.gte': 6.5,
       'vote_count.gte': 1000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -57,7 +56,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'fr',
       'vote_average.gte': 6.5,
       'vote_count.gte': 1000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -70,7 +69,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'es',
       'vote_average.gte': 6.5,
       'vote_count.gte': 1000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -83,7 +82,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'ja',
       'vote_average.gte': 6.5,
       'vote_count.gte': 1000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -96,7 +95,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'it',
       'vote_average.gte': 6.5,
       'vote_count.gte': 1000,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -109,7 +108,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'hi',
       'vote_average.gte': 6.0,
       'vote_count.gte': 300,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -123,21 +122,21 @@ export const COUNTRIES: CountryDefinition[] = [
       with_origin_country: 'CN',         // mainland China only
       'vote_average.gte': 5.0,
       'vote_count.gte': 300,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
   {
-    slug: 'hong-kong',
-    title: 'Hong Kong Cinema',
-    description: 'Bullet ballets, martial arts, and neon-soaked noir',
-    language: 'zh',
+    slug: 'thai',
+    title: 'Thai Cinema',
+    description: 'Wild genre swings — horror, comedy, action, heart',
+    language: 'th',
     query: {
-      with_original_language: 'zh',
-      with_origin_country: 'HK',
+      with_original_language: 'th',
+      with_origin_country: 'TH',
       'vote_average.gte': 5.0,
-      'vote_count.gte': 300,
-      without_genres: '99',              // no Documentary
+      'vote_count.gte': 100,
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -150,7 +149,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'de',
       'vote_average.gte': 6.0,
       'vote_count.gte': 500,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },
@@ -163,7 +162,7 @@ export const COUNTRIES: CountryDefinition[] = [
       with_original_language: 'vi',
       with_origin_country: 'VN',
       'vote_average.gte': 5.0,
-      without_genres: '99',              // no Documentary
+      without_genres: '99',              
       sort_by: 'popularity.desc',
     },
   },

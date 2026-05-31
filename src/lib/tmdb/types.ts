@@ -21,6 +21,18 @@ export interface Movie extends MovieBase {
   genre_ids: number[]
 }
 
+export interface ProductionCountry {
+  iso_3166_1: string
+  name: string
+}
+
+export interface ProductionCompany {
+  id: number
+  name: string
+  logo_path: string | null
+  origin_country: string
+}
+
 export interface MovieDetail extends MovieBase {
   genres: Genre[]
   imdb_id: string | null
@@ -29,6 +41,8 @@ export interface MovieDetail extends MovieBase {
   status: string
   budget: number
   revenue: number
+  production_countries: ProductionCountry[]
+  production_companies: ProductionCompany[]
 }
 
 export interface CastMember {

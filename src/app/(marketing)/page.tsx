@@ -12,7 +12,7 @@ import { COUNTRIES } from '@/lib/countries/definitions'
 
 async function TrendingSection() {
   const data = await getTrending()
-  return <MovieGrid movies={data.results} priority />
+  return <MovieGrid movies={data.results.slice(0, 10)} priority />
 }
 
 export default async function HomePage() {

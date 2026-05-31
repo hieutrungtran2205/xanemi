@@ -77,6 +77,12 @@ export function MovieHero({ movie }: Props) {
                     <span>{runtime}</span>
                   </>
                 )}
+                {movie.production_countries.length > 0 && (
+                  <>
+                    <span aria-hidden>·</span>
+                    <span>{movie.production_countries.map((c) => c.name).join(', ')}</span>
+                  </>
+                )}
                 <span aria-hidden>·</span>
                 <span className="text-gold">★</span>
                 <span className="text-foreground">{rating}</span>
@@ -103,6 +109,12 @@ export function MovieHero({ movie }: Props) {
                     </Badge>
                   ))}
                 </div>
+              )}
+
+              {movie.production_companies.length > 0 && (
+                <p className="text-xs text-muted-foreground/60">
+                  {movie.production_companies.map((c) => c.name).join(' · ')}
+                </p>
               )}
             </div>
           </div>
