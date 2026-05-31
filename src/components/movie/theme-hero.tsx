@@ -6,9 +6,10 @@ interface Props {
   backdropPath: string | null
   title: string
   description: string
+  label?: string
 }
 
-export function ThemeHero({ backdropPath, title, description }: Props) {
+export function ThemeHero({ backdropPath, title, description, label = 'Theme' }: Props) {
   const backdrop = backdropUrl(backdropPath, 'original')
 
   return (
@@ -35,7 +36,7 @@ export function ThemeHero({ backdropPath, title, description }: Props) {
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="max-w-2xl pb-2 md:pb-6">
             <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/65">
-              Theme
+              {label}
             </span>
             <h1 className="mt-3 font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
               {title}

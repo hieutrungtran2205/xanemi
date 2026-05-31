@@ -127,6 +127,14 @@ External:
 **Trade-off**: User không thể vừa search tên vừa filter genre cùng lúc.
 **Autocomplete (header)**: Search bar có dropdown preview 5 results qua route handler `/api/search/movies` (proxy `searchMovies()` server-only). Debounce 500ms + `AbortController`. "See more" / Enter không highlight → push `/discover?q=`. Bar mirror URL `?q=` qua render-time sync (`urlQ !== prevUrlQ`) — clear link reset bar tự động.
 
+### ADR-017: Country system — cinema-by-origin discovery lane
+**Decision**: Thêm `/country/[slug]` song song với `/theme/[slug]` và `/discover/[mood]`. Countries filter theo `with_original_language` và/hoặc `with_origin_country` (ISO 3166-1) của TMDB Discover API.
+**Why**: Một số user discover phim theo nền điện ảnh ("muốn xem phim Hàn", "phim Pháp") — mental model khác hẳn mood lẫn genre.
+**Data**: `lib/countries/definitions.ts` — mảng `COUNTRIES[]` với `slug`, `title`, `description`, `language` (ISO 639-1, metadata only), `query`.
+**Route**: `app/country/[slug]/page.tsx` dùng `getCountryMovies()` endpoint, reuse `ThemeHero` (với `label="Cinema"`) và `MovieGrid`.
+**vote_count threshold**: Điều chỉnh theo độ phổ biến của từng nền điện ảnh trên TMDB — Hollywood 5000, niche (VN, IT, DE) xuống 50-500 để tránh trả về rỗng.
+**Countries hiện tại (12)**: Hollywood (US), British (GB), Korean, French, Spanish & Latino, Japanese, Italian, Bollywood (IN), Chinese (CN), Hong Kong (HK), German, Vietnamese (VN).
+
 ### ADR-016: Theme system — genre-first discovery lane
 **Decision**: Thêm `/theme/[slug]` song song với `/discover/[mood]`. Themes map trực tiếp tới TMDB genre IDs, moods map tới cảm xúc (nhiều genre + params phức tạp hơn).
 **Why**: Một số user biết rõ muốn xem gì ("muốn xem phim chiến tranh") hơn là cảm xúc ("muốn thư giãn"). Genre-first là UX quen thuộc, dễ onboard.

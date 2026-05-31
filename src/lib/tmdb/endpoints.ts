@@ -121,6 +121,14 @@ export async function searchMovies(query: string, page: number): Promise<TMDBRes
   return tmdbList<Movie>('/search/movie', { query, page, include_adult: 'false' }, { tag: 'search' })
 }
 
+export async function getCountryMovies(
+  slug: string,
+  query: Record<string, string | number>,
+  page = 1
+): Promise<TMDBResponse<Movie>> {
+  return tmdbList<Movie>('/discover/movie', { ...query, page }, { tag: `country-${slug}`, revalidate: 86400 })
+}
+
 export async function getThemeMovies(
   slug: string,
   query: Record<string, string | number>,

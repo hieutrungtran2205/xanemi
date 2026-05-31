@@ -33,6 +33,17 @@
 | File | `lib/moods/definitions.ts` | `lib/themes/definitions.ts` |
 | Route | `/discover/[mood]` | `/theme/[slug]` |
 
+## Country system
+
+Tương tự theme nhưng filter theo xuất xứ phim. File: `lib/countries/definitions.ts`. Route: `/country/[slug]`.
+
+TMDB params dùng:
+- `with_original_language` — ngôn ngữ gốc (ISO 639-1: en, ko, fr, ja...)
+- `with_origin_country` — quốc gia sản xuất (ISO 3166-1: US, GB, HK, VN...) — dùng `|` để OR nhiều nước (VD: `SE|DK|NO`)
+- Hai param kết hợp khi cần tách rõ (VD: Chinese `zh+CN` vs Hong Kong `zh+HK`)
+
+**vote_count.gte** thấp hơn bình thường cho các nền điện ảnh niche (VN, IT, DE) để tránh trả về rỗng.
+
 Hai hệ thống độc lập, cùng dùng TMDB Discover API, có thể trả về phim trùng nhau — đó là bình thường.
 
 ## 10 Moods v1

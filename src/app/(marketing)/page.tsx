@@ -6,7 +6,9 @@ import { PageShell } from '@/components/layout/page-shell'
 import { Container } from '@/components/layout/container'
 import { SectionHeading } from '@/components/layout/section-heading'
 import { ThemeCard, ThemeCardSkeleton } from '@/components/movie/theme-card'
+import { CountryCard, CountryCardSkeleton } from '@/components/movie/country-card'
 import { THEMES } from '@/lib/themes/definitions'
+import { COUNTRIES } from '@/lib/countries/definitions'
 
 async function TrendingSection() {
   const data = await getTrending()
@@ -32,6 +34,17 @@ export default async function HomePage() {
             {THEMES.map((theme, i) => (
               <Suspense key={theme.slug} fallback={<ThemeCardSkeleton />}>
                 <ThemeCard theme={theme} priority={i < 3} />
+              </Suspense>
+            ))}
+          </div>
+        </section>
+
+        <section id="cinemas" className="pb-16 sm:pb-20">
+          <SectionHeading title="Cinema by Country" />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {COUNTRIES.map((country, i) => (
+              <Suspense key={country.slug} fallback={<CountryCardSkeleton />}>
+                <CountryCard country={country} priority={i < 3} />
               </Suspense>
             ))}
           </div>
