@@ -88,14 +88,6 @@ export function ActiveFilterChips({ genres }: Props) {
           <X size={11} className="text-muted-foreground" />
         </Button>
       ))}
-      {chips.length > 1 && (
-        <Button
-          variant="link"
-          onClick={() => { setFilters(DEFAULT_FILTERS); setPage(null, { shallow: false }) }}
-        >
-          Clear all
-        </Button>
-      )}
     </div>
   )
 }

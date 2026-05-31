@@ -18,7 +18,7 @@ export function BackButton() {
   if (pathname === "/") return null;
 
   return (
-    <div className={`fixed left-4 top-16 z-40 transition-opacity duration-300 sm:left-8 ${scrolled ? "opacity-50 hover:opacity-100" : "opacity-100"}`}>
+    <div className={`fixed right-4 top-16 z-40 transition-opacity duration-300 sm:right-8 ${scrolled ? "opacity-50 hover:opacity-100" : "opacity-100"}`}>
       <Button variant="ghost" onClick={() => router.back()}>
         <span aria-hidden>←</span>
         Back

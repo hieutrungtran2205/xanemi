@@ -32,7 +32,7 @@ export function FilterPanel({ genres }: Props) {
             disabled={isPending}
             className="mt-2 w-full"
           >
-            {isPending ? 'Loading…' : 'Apply Filters'}
+            {isPending ? 'Loading…' : 'Apply'}
           </Button>
           <div className="mt-2 min-h-0 flex-1 overflow-y-auto divide-y divide-border pr-1">
             <FilterControls genres={genres} local={local} setLocal={setLocal} />

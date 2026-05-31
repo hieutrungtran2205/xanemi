@@ -38,7 +38,7 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
         )}
       </PageHeader>
 
-      <Container className="py-10">
+      <Container className="py-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           {!q && <FilterPanel genres={genres} />}
 
