@@ -6,7 +6,7 @@ import { buttonVariants } from '@/components/ui/button'
 export default function ThemeNotFound() {
   return (
     <PageShell>
-      <Container className="flex min-h-[60vh] flex-col items-center justify-center gap-6 text-center">
+      <Container className="flex min-h-[50vh] flex-col items-center justify-center gap-6 text-center">
         <p className="text-5xl">🎬</p>
         <div>
           <h1 className="font-heading text-2xl font-bold text-foreground">Theme not found</h1>

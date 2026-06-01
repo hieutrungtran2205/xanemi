@@ -27,7 +27,7 @@ export function MovieHero({ movie }: Props) {
   return (
     <section>
       {/* Backdrop */}
-      <div className="relative h-[60vh] min-h-80 w-full overflow-hidden bg-surface">
+      <div className="relative h-[50vh] min-h-80 w-full overflow-hidden bg-surface">
         {backdrop && (
           <Image
             src={backdrop}
@@ -142,7 +142,7 @@ export function MovieHero({ movie }: Props) {
 export function MovieHeroSkeleton() {
   return (
     <section>
-      <Skeleton className="h-[60vh] min-h-80 rounded-none bg-surface" />
+      <Skeleton className="h-[50vh] min-h-80 rounded-none bg-surface" />
       <div className="relative -mt-24 md:-mt-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">

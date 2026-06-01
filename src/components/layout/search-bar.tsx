@@ -144,7 +144,9 @@ export function SearchBar() {
       ref={containerRef}
       onSubmit={handleSubmit}
       className={`relative flex items-center gap-2 rounded-md border bg-surface px-3 py-1.5 transition-[width,border-color] duration-200 ${
-        expanded ? 'border-ring w-52 sm:w-72' : 'border-border w-36 sm:w-52'
+        expanded
+          ? 'border-ring flex-1 min-w-0 sm:ml-auto sm:w-72 sm:flex-none'
+          : 'border-border ml-auto w-36 sm:w-52'
       }`}
     >
       <Search size={13} className="shrink-0 text-muted-foreground" />

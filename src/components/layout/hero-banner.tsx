@@ -10,7 +10,7 @@ export async function HeroBanner() {
   const backdrop = backdropUrl(featured?.backdrop_path ?? null, "original");
 
   return (
-    <section className="relative flex min-h-[60vh] items-end pb-12 sm:min-h-[75vh] sm:pb-16">
+    <section className="relative flex min-h-[50vh] items-end pb-12 sm:min-h-[75vh] sm:pb-16">
       {backdrop && (
         <Image
           src={backdrop}

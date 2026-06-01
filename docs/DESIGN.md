@@ -205,7 +205,7 @@ Implementation: `components/layout/logo.tsx`. KHÔNG dùng image/raster logo tro
 
 ### MovieHero (detail page)
 ```
-- Backdrop full-width, height ~60vh
+- Backdrop full-width, height ~50vh
 - Gradient overlay: from-bg via-bg/60 to-transparent (fade lên trên)
 - Content: poster (trái) + title/meta/actions (phải), align bottom
 - Mobile: poster trên, info dưới (stack)

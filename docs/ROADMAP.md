@@ -79,7 +79,7 @@
 - [ ] `components/layout/hero-banner.tsx` (backdrop + overlay + H1 + subtitle + MoodPicker)
 - [ ] Hero backdrop: random từ trending movies (1 fetch server-side, KHÔNG carousel)
 - [ ] Dark overlay: `bg-black/70` + gradient fade từ bottom lên
-- [ ] Height: `70-80vh` desktop / `60vh` mobile
+- [ ] Height: `70-80vh` desktop / `50vh` mobile
 - [ ] MoodPicker đặt ngay trong hero, dưới H1
 - [ ] Click chip → navigate `/discover/[mood]`
 **Acceptance**:

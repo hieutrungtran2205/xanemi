@@ -25,8 +25,8 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
 
   return (
     <PageShell>
-      <PageHeader title={q ? `"${q}"` : 'Browse Movies'}>
-        {q && (
+      {q && (
+        <PageHeader title={`"${q}"`}>
           <p className="mt-1 text-sm text-muted-foreground">
             <Link
               href="/discover"
@@ -35,8 +35,8 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
               clear search
             </Link>
           </p>
-        )}
-      </PageHeader>
+        </PageHeader>
+      )}
 
       <Container className="py-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">

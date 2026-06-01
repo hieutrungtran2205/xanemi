@@ -17,9 +17,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Moodflix — Find movies by mood",
-  description:
-    "Discover movies that match your mood. Browse by feeling, not just genre.",
+  title: "Xanemi",
+  description: "Your go-to place to discover and explore films.",
 };
 
 export default function RootLayout({
@@ -32,7 +31,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
         <NuqsAdapter>
           <ScrollToTop />
           <Header />

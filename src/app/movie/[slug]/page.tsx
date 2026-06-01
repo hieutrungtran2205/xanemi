@@ -47,10 +47,10 @@ export default async function MoviePage({ params }: PageProps) {
     <PageShell>
       <MovieHero movie={movie} />
 
-      <Container className="py-12">
+      <Container className="py-8">
         {movie.overview && (
-          <section className="mb-12 max-w-3xl">
-            <SectionHeading title="Synopsis" />
+          <section className="mb-8 max-w-3xl">
+            <SectionHeading title="Overview" />
             <p className="text-base leading-relaxed text-muted-foreground">
               {movie.overview}
             </p>
@@ -58,7 +58,7 @@ export default async function MoviePage({ params }: PageProps) {
         )}
 
         {trailer && (
-          <section className="mb-12">
+          <section className="mb-8">
             <SectionHeading title="Trailer" />
             <div className="max-w-3xl">
               <TrailerEmbed videoKey={trailer.key} title={movie.title} />
@@ -67,11 +67,11 @@ export default async function MoviePage({ params }: PageProps) {
         )}
 
         {directors.length > 0 && (
-          <section className="mb-12">
+          <section className="mb-8">
             <SectionHeading
               title={directors.length > 1 ? "Directors" : "Director"}
             />
-            <div className="grid grid-cols-5 gap-3 sm:grid-cols-7 md:grid-cols-8 lg:grid-cols-10">
+            <div className="grid grid-cols-4 gap-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10">
               {directors.map((d) => (
                 <PersonCreditCard
                   key={d.credit_id}
@@ -86,9 +86,9 @@ export default async function MoviePage({ params }: PageProps) {
         )}
 
         {cast.length > 0 && (
-          <section className="mb-12">
+          <section className="mb-8">
             <SectionHeading title="Cast" />
-            <div className="grid grid-cols-5 gap-3 sm:grid-cols-7 md:grid-cols-8 lg:grid-cols-10">
+            <div className="grid grid-cols-4 gap-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10">
               {cast.map((member) => (
                 <PersonCreditCard
                   key={member.id}
@@ -104,7 +104,7 @@ export default async function MoviePage({ params }: PageProps) {
 
         {similar && similar.results.length > 0 && (
           <section>
-            <SectionHeading title="Similar Movies" className="mb-6" />
+            <SectionHeading title="More Like This" className="mb-6" />
             <MovieGrid movies={similar.results.slice(0, 10)} />
           </section>
         )}

@@ -19,7 +19,7 @@ export function MoodMovieHero({ movie, mood }: Props) {
   return (
     <div className="relative overflow-hidden">
       {/* Backdrop */}
-      <div className="relative h-[60vh] min-h-80 w-full bg-surface">
+      <div className="relative h-[50vh] min-h-80 w-full bg-surface">
         {backdrop && (
           <Image
             src={backdrop}
@@ -124,7 +124,7 @@ export function MoodMovieHero({ movie, mood }: Props) {
 export function MoodMovieHeroSkeleton() {
   return (
     <div>
-      <div className="h-[60vh] min-h-80 animate-pulse bg-surface" />
+      <div className="h-[50vh] min-h-80 animate-pulse bg-surface" />
       <div className="relative -mt-44 pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">

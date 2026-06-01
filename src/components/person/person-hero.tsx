@@ -32,7 +32,7 @@ export function PersonHero({ person, backdropPath }: Props) {
   return (
     <section>
       {/* Backdrop — falls back to surface when there's no movie image */}
-      <div className="relative h-[60vh] min-h-80 w-full overflow-hidden bg-surface">
+      <div className="relative h-[50vh] min-h-80 w-full overflow-hidden bg-surface">
         {backdrop && (
           <Image
             src={backdrop}
@@ -108,7 +108,7 @@ export function PersonHero({ person, backdropPath }: Props) {
 export function PersonHeroSkeleton() {
   return (
     <section>
-      <Skeleton className="h-[55vh] min-h-72 w-full rounded-none bg-surface" />
+      <Skeleton className="h-[50vh] min-h-72 w-full rounded-none bg-surface" />
 
       <div className="relative -mt-32 md:-mt-48">
         <div className="mx-auto max-w-7xl px-4 sm:px-8">

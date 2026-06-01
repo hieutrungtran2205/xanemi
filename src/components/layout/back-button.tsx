@@ -15,13 +15,12 @@ export function BackButton() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname.startsWith("/discover")) return null;
 
   return (
-    <div className={`fixed right-4 top-16 z-40 transition-opacity duration-300 sm:right-8 ${scrolled ? "opacity-50 hover:opacity-100" : "opacity-100"}`}>
-      <Button variant="ghost" onClick={() => router.back()}>
-        <span aria-hidden>←</span>
-        Back
+    <div className={`fixed left-4 top-16 z-40 transition-opacity duration-300 sm:left-8 ${scrolled ? "opacity-50 hover:opacity-100" : "opacity-100"}`}>
+      <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Go back" className="size-10 sm:size-8">
+        <span aria-hidden className="text-xl leading-none sm:text-lg">←</span>
       </Button>
     </div>
   );
