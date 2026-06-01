@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
@@ -11,7 +12,14 @@ export function Header() {
       <Container className="flex items-center gap-4 py-3">
         <Logo />
         <div className="flex-1" />
-        <SearchBar />
+        {/* useSearchParams in SearchBar needs a Suspense boundary for static prerender (e.g. /_not-found) */}
+        <Suspense
+          fallback={
+            <div className="h-8.5 w-36 rounded-md border border-border bg-surface sm:w-52" />
+          }
+        >
+          <SearchBar />
+        </Suspense>
         <nav className="flex items-center gap-4">
           <Link
             href="/discover"
