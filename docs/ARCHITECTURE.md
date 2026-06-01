@@ -106,10 +106,10 @@ External:
 **Why**: Học thật, không chỉ ship sản phẩm rỗng. SEO cần thời gian validate.
 **Trade-off**: Chậm hơn yolo ~1.5 tuần.
 
-### ADR-009: Drop "Cinemood", chọn "Moodflix"
+### ADR-009: Drop "Cinemood", chọn "Moodflix" (superseded by ADR-019)
 **Decision**: Working name = Moodflix, deploy `*.vercel.app`. Naming decision deferred (không critical cho personal project).
 **Why**: Cinemood/Feelm bị market saturation. Naming không đáng tốn bandwidth ở MVP phase.
-**Trade-off**: Có thể rebrand sau.
+**Trade-off**: Có thể rebrand sau. → Đã rebrand thành **Xanemi**, xem ADR-019.
 
 ### ADR-010: MVP movie-only, TV series defer V2
 **Decision**: Chỉ build movie. KHÔNG build TV series trong MVP.
@@ -209,6 +209,19 @@ Option 1. tmdbList<T>(path, params, options?) lives in lib/tmdb/endpoints.ts. li
 - (−) `components/layout/hero-banner.tsx` + `components/mood/mood-picker.tsx` thành **orphan** — defer xoá sang slice "deprecate mood" riêng (feature/refactor tách commit).
 - "Mood of the Day" của ADR-014 không còn ở home.
 - Chi tiết UI: docs/DESIGN.md → "Hero Slider (Landing)".
+
+### ADR-019: Rebrand "Moodflix" → "Xanemi" (supersedes ADR-009)
+
+**Context**: "Moodflix" chỉ là working name (ADR-009), và "-flix" bị bão hòa (Netflix-clone vibe). Cần tên có cá tính, dễ trademark, không đụng hàng.
+
+**Decision**: Đổi tên thành **Xanemi** — chơi chữ từ việc **đọc ngược "Cinema"**. Âm hưởng lạ, độc nhất, dễ đăng ký/bắt SEO vì gần như zero competition trên chữ này.
+
+**Logo**: wordmark "Xanemi" (Space Grotesk semibold) với **dấu chấm chữ "i" cuối thay bằng nút play** — nhấn ngầm "điện ảnh / bấm xem" mà không phá chữ. Chi tiết dựng ở docs/DESIGN.md → "Logo".
+
+**Consequences**:
+- (+) Tên độc, brandable, SEO-friendly (không cạnh tranh từ khóa).
+- (−) Rủi ro **phát âm**: chữ "X" mơ hồ (z/ks/eks/sh). → Định hướng logo: **giữ wordmark đọc rõ tên**, KHÔNG biến X thành mark trừu tượng (đã thử film-strip X / reel-hub X rồi bỏ vì giết legibility). Vibe điện ảnh dồn vào nút play nhỏ ở chữ i.
+- Rebrand đầy đủ (metadata `<title>`, footer, OG tags, favicon, `*.vercel.app` subdomain, docs titles) là **slice riêng chưa làm** — slice này mới chỉ đổi `components/layout/logo.tsx` + docs logo/naming.
 
 ## Data Model (implement Week 3)
 

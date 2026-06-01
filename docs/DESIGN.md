@@ -132,15 +132,26 @@ KHÔNG: bounce, spring, scale lớn, rotate playful.
 
 ## Logo
 
-Text wordmark, CSS thuần:
+Text wordmark **"Xanemi"** — Space Grotesk, CSS thuần. Dấu chấm chữ "i" cuối được thay bằng **nút play** (gợi điện ảnh).
+
 ```
-"moodflix" — Space Grotesk
-- "mood" : font-weight 700
-- "flix" : font-weight 300, text-muted
+"Xanemi" — Space Grotesk
+- font-weight 600 (semibold), 1 weight đều
 - letter-spacing: -0.02em
-- lowercase
+- leading-none           # khóa line-height để play tittle neo ổn định mọi nơi
+- mixed case (chữ X hoa)
 ```
-KHÔNG dùng image/SVG logo trong MVP.
+
+Play tittle (thay chấm chữ i):
+- Render chữ cuối bằng **"ı" dotless** (U+0131) rồi đặt SVG tam giác play vào đúng vị trí chấm.
+- Tam giác **trọng tâm-giữa** (path `M34 18 L82 50 L34 82 Z`) để `translateX(-50%)` căn giữa quang học trên thân chữ ı.
+- Kích thước theo `em` (`h-[0.3em] w-[0.3em]`, `top-[-0.06em]`) → tự scale theo cỡ chữ.
+- `currentColor` → tự ăn màu chữ, mono, không thêm màu accent.
+- A11y: `aria-label="Xanemi"` trên `<Link>`, `aria-hidden` trên svg (glyph "ı" đọc lệch với screen reader).
+
+**Tại sao KHÔNG biến chữ X thành mark điện ảnh**: đã thử (film-strip X, reel-hub X) nhưng X tự nó đã mơ hồ phát âm (z? ks? eks?); biến nó thành symbol trừu tượng làm mất tính đọc-được. Nguyên tắc: **wordmark phải đọc rõ tên trước**, vibe điện ảnh là yếu tố phụ (nút play) — không hi sinh legibility. Xem ADR-019.
+
+Implementation: `components/layout/logo.tsx`. KHÔNG dùng image/raster logo trong MVP.
 
 ## Component Patterns
 
