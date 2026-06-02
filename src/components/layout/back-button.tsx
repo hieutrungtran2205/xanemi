@@ -18,7 +18,7 @@ export function BackButton() {
   if (pathname === "/" || pathname.startsWith("/discover")) return null;
 
   return (
-    <div className={`fixed left-4 top-16 z-40 transition-opacity duration-300 sm:left-8 ${scrolled ? "opacity-50 hover:opacity-100" : "opacity-100"}`}>
+    <div className={`fixed left-4 top-16 z-40 hidden transition-opacity duration-300 sm:left-8 sm:block ${scrolled ? "opacity-50 hover:opacity-100" : "opacity-100"}`}>
       <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Go back" className="size-10 sm:size-8">
         <span aria-hidden className="text-xl leading-none sm:text-lg">←</span>
       </Button>
