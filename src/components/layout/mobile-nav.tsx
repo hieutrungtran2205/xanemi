@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { Menu } from 'lucide-react'
+import { LogOut, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
   Sheet,
   SheetTrigger,
@@ -10,14 +11,21 @@ import {
   SheetClose,
   SheetTitle,
 } from '@/components/ui/sheet'
+import { signInWithGoogle, signOutAction } from '@/lib/auth-actions'
 import { Logo } from './logo'
+import type { SessionUser } from './user-dropdown'
 
 const NAV_LINKS = [
   { href: '/discover', label: 'Browse' },
   { href: '/trending', label: 'Trending' },
 ]
 
-export function MobileNav() {
+function getInitials(user: SessionUser): string {
+  const source = user.name ?? user.email ?? '?'
+  return source.trim().charAt(0).toUpperCase()
+}
+
+export function MobileNav({ user }: { user?: SessionUser }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -46,9 +54,40 @@ export function MobileNav() {
         </nav>
 
         <div className="mt-auto border-t border-border px-6 py-6">
-          <Button variant="outline" className="w-full">
-            Sign in
-          </Button>
+          {user ? (
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <Avatar>
+                  {user.image ? (
+                    <AvatarImage src={user.image} alt={user.name ?? ''} />
+                  ) : null}
+                  <AvatarFallback>{getInitials(user)}</AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-foreground">
+                    {user.name ?? 'Account'}
+                  </p>
+                  {user.email ? (
+                    <p className="truncate text-xs text-muted-foreground">
+                      {user.email}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+              <form action={signOutAction}>
+                <Button type="submit" variant="outline" className="w-full">
+                  <LogOut />
+                  Sign out
+                </Button>
+              </form>
+            </div>
+          ) : (
+            <form action={signInWithGoogle}>
+              <Button type="submit" variant="outline" className="w-full">
+                Sign in
+              </Button>
+            </form>
+          )}
         </div>
       </SheetContent>
     </Sheet>

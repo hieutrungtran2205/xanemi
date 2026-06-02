@@ -1,12 +1,16 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { auth } from "@/auth";
 import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
 import { Container } from "./container";
-import { Button } from "@/components/ui/button";
+import { UserMenu } from "./user-menu";
 import { MobileNav } from "./mobile-nav";
 
-export function Header() {
+export async function Header() {
+  const session = await auth();
+  const user = session?.user;
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
       <Container className="flex items-center gap-4 py-3">
@@ -32,11 +36,9 @@ export function Header() {
           >
             Trending
           </Link>
-          <Button variant="outline" size="sm" className="hidden sm:inline-flex">
-            Sign in
-          </Button>
+          <UserMenu user={user} />
         </nav>
-        <MobileNav />
+        <MobileNav user={user} />
       </Container>
     </header>
   );
