@@ -148,10 +148,10 @@
 
 ## Week 3: Auth + User Features ⬜
 
-- [ ] Slice 3.1: Neon DB + Drizzle setup
-- [ ] Slice 3.2: Drizzle schema (User, Watchlist, Watched, MoodLog)
-- [ ] Slice 3.3: Auth.js v5 + Google OAuth
-- [ ] Slice 3.4: Protected routes middleware + login modal
+- [x] Slice 3.1: Neon DB + Drizzle setup → xem **Auth/Login (hoàn thành)** ✅
+- [x] Slice 3.2: Drizzle schema (auth tables) — Watchlist/Watched/MoodLog defer sang 3.5+
+- [x] Slice 3.3: Auth.js v5 + Google OAuth ✅
+- [ ] Slice 3.4: Protected routes middleware (`proxy.ts`) + login gating — gộp vào slice Watchlist
 - [ ] Slice 3.5: Watchlist API + button trên detail
 - [ ] Slice 3.6: /watchlist page + empty state
 - [ ] Slice 3.7: Watched + rating + /watched page
@@ -203,6 +203,24 @@ Header search bar mở rộng từ submit-only thành autocomplete dropdown — 
 - Bar value mirror URL `?q=`: navigate sang trang không có `?q=` (e.g. movie detail sau khi click result) cũng clear bar — UX phổ biến.
 - Stale results giữ lại khi user gõ tiếp (chưa qua debounce) thay vì clear ngay → tránh flicker; fetch mới setLoading(true) → skeleton overrides.
 - `controller.signal.aborted` check ở finally tránh setState sau khi unmount/abort.
+
+## Auth / Login (hoàn thành) ✅
+
+Đăng nhập Google OAuth, session lưu Neon. Nền cho watchlist/watched (Slice 3.5+). Chi tiết quyết định: **ADR-020** trong docs/ARCHITECTURE.md.
+
+- [x] Deps: `next-auth@5 (beta)` + `@auth/drizzle-adapter` (+ `dotenv` dev). `@neondatabase/serverless`/`drizzle-orm`/`drizzle-kit` đã có sẵn.
+- [x] `src/lib/db/client.ts` — Neon HTTP driver + Drizzle, `server-only`. `src/lib/db/schema.ts` — 4 bảng chuẩn Auth.js (`user`/`account`/`session`/`verificationToken`).
+- [x] `drizzle.config.ts` (load `.env.local` qua dotenv) + scripts `db:generate`/`db:push`/`db:studio`. Tạo bảng bằng **`db:push`** (chưa dùng migration files).
+- [x] `src/auth.ts` — NextAuth + DrizzleAdapter + Google, database session. `src/app/api/auth/[...nextauth]/route.ts` — handler.
+- [x] `src/lib/auth-actions.ts` — server actions `signInWithGoogle`/`signOutAction` (dùng chung header + mobile-nav).
+- [x] `Header` async → `auth()`, truyền `user` xuống. `user-menu.tsx` (server) + `user-dropdown.tsx` (client, avatar + Sign out). `mobile-nav.tsx` wire sign in/out. shadcn `dropdown-menu` + `avatar` đã add.
+- [x] Env: `AUTH_SECRET` (gen sẵn) + `AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` + `DATABASE_URL`. Set y hệt trên Vercel (`.env.local` gitignore). Google OAuth redirect URI: local + `https://xanemi.vercel.app`.
+- [x] Verify: `tsc` sạch, `build` pass, login local + production chạy, 2 user row trên Neon.
+
+**Hidden behaviors / cần biết**:
+- `auth()` trong root Header → **toàn site dynamic** (mất static cache, TMDB data cache vẫn chạy). Liên quan SEO Week 2.
+- Google app đang **Testing** nhưng non-sensitive scope → Gmail bất kỳ vẫn login được dù chưa publish (không document chính thức). Publish khi muốn ổn định — không cần Google verification.
+- Chưa có: `proxy.ts`/protected routes, watchlist/watched tables + UI, trang `/login` (đang redirect Google trực tiếp).
 
 ## Week 4+: Post-MVP ⬜
 

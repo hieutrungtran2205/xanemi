@@ -223,6 +223,35 @@ Option 1. tmdbList<T>(path, params, options?) lives in lib/tmdb/endpoints.ts. li
 - (−) Rủi ro **phát âm**: chữ "X" mơ hồ (z/ks/eks/sh). → Định hướng logo: **giữ wordmark đọc rõ tên**, KHÔNG biến X thành mark trừu tượng (đã thử film-strip X / reel-hub X rồi bỏ vì giết legibility). Vibe điện ảnh dồn vào nút play nhỏ ở chữ i.
 - Rebrand đầy đủ (metadata `<title>`, footer, OG tags, favicon, `*.vercel.app` subdomain, docs titles) là **slice riêng chưa làm** — slice này mới chỉ đổi `components/layout/logo.tsx` + docs logo/naming.
 
+### ADR-020: Auth — Auth.js v5 + Google OAuth + database sessions (Neon/Drizzle)
+
+**Context**: Week 3 cần đăng nhập làm nền cho watchlist/watched. Chốt làm full DB ngay (không JWT-only) để có sẵn `user.id` cho các bảng user-data sau.
+
+**Decision**: `next-auth@5 (beta)` + `@auth/drizzle-adapter`, **database session strategy** (có adapter → mặc định), provider **Google OAuth only**.
+- `src/auth.ts` export `{ handlers, auth, signIn, signOut }`. Route handler `src/app/api/auth/[...nextauth]/route.ts` re-export `handlers`.
+- DB: `src/lib/db/client.ts` (Neon HTTP driver `drizzle-orm/neon-http` + `server-only`) + `src/lib/db/schema.ts`.
+- **Schema = 4 bảng chuẩn Auth.js**: `user`, `account`, `session`, `verificationToken` — tên bảng/cột do adapter quy định, không tự đặt. `user.id` = `text` + `$defaultFn(crypto.randomUUID)`. `verificationToken` luôn rỗng với Google-only (chỉ dùng khi thêm Email provider) nhưng vẫn phải khai báo.
+- **Migration = push-based** (`drizzle-kit push`), không sinh migration files ở giai đoạn này. Scripts: `db:generate`/`db:push`/`db:studio`. `drizzle.config.ts` tự load `.env.local` qua `dotenv` (drizzle-kit chạy ngoài Next).
+
+**Env convention** (`.env.local`, và set y hệt trên Vercel vì `.env.local` bị gitignore):
+- `AUTH_SECRET`, `DATABASE_URL`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`.
+- Auth.js v5 **auto-đọc** `AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` → `providers: [Google]` không cần truyền config. `AUTH_URL` không cần set (Vercel auto-detect, `trustHost` auto-bật).
+
+**UI wiring**:
+- Server actions `src/lib/auth-actions.ts` (`signInWithGoogle`, `signOutAction`) — dùng chung cho header + mobile-nav.
+- `Header` thành **async Server Component**, gọi `auth()` rồi truyền `user` xuống `UserMenu` (server) + `MobileNav` (client). `UserDropdown` (client) = avatar + dropdown Sign out.
+- **Không có trang `/login`** — Sign in = server action redirect thẳng sang Google (không modal, không trang trung gian).
+
+**Consequences**:
+- (−) **Toàn site thành dynamic**: `auth()` trong root Header đọc cookies → mọi route mất full-route static cache (build hiện `ƒ` cho tất cả). TMDB data cache (revalidate) **vẫn chạy** nên fetch không chậm đi. Khi vào SEO (Week 2 deferred) cần tách auth khỏi static path (PPR / client session) nếu muốn static lại.
+- (−) `auth()` query DB mỗi request (đánh đổi của database strategy). Chấp nhận ở MVP; muốn giảm tải DB thì chuyển `session.strategy: 'jwt'` nhưng mất khả năng revoke server-side.
+- Multi-provider sẵn sàng: thêm GitHub/email sau = thêm row `account` trỏ cùng `user.id`, không sửa schema.
+- `proxy.ts` (Next 16 đổi tên từ `middleware.ts`) + protected routes **chưa làm** — gộp vào slice watchlist khi thật sự cần chặn trang.
+
+**Google OAuth — hành vi thực tế cần biết**:
+- App ở **Testing** + chỉ xài **non-sensitive scopes** (`openid email profile`, mặc định) → Gmail bất kỳ vẫn login được dù không nằm trong Test users (Google không siết gate cho basic scopes). Counter "OAuth user cap (… other)" chỉ áp cho sensitive scopes. Hành vi này **không được document chính thức** → vẫn nên **Publish app** (Testing → In production) cho ổn định. Publish basic-scope **không cần Google verification**.
+- Redirect URI phải khai trong OAuth client (Web application type). Giữ **đồng thời** local + production (chỉ add, không đè): `http://localhost:3000/api/auth/callback/google` + `https://xanemi.vercel.app/api/auth/callback/google`. Format cố định `{origin}/api/auth/callback/google` do Auth.js định nghĩa.
+
 ## Data Model (implement Week 3)
 
 Movie-only, không có `mediaType` field.
@@ -232,12 +261,14 @@ USER (1) --- (N) WATCHLIST
 USER (1) --- (N) WATCHED
 USER (1) --- (N) MOOD_LOG
 
-USER:      id, email (unique), name, image, createdAt
+USER:      id, name, email (unique), emailVerified, image    # Auth.js shape (ADR-020) — KHÔNG có createdAt
 WATCHLIST: id, userId, tmdbId, snapshot(jsonb: title/poster/year), addedAt
 WATCHED:   id, userId, tmdbId, rating(1-10 nullable), moodWhenWatched, snapshot, watchedAt
 MOOD_LOG:  id, userId(nullable), sessionId, mood, resultTmdbIds(jsonb), clickedTmdbId, createdAt
 ```
 
+- `USER`/`ACCOUNT`/`SESSION`/`VERIFICATION_TOKEN` đã implement theo schema chuẩn Auth.js (ADR-020) — `user` cột do adapter quy định, không thêm field tuỳ ý.
+- `WATCHLIST`/`WATCHED`/`MOOD_LOG` **chưa implement** — sẽ là bảng mới `FK userId → user.id`, không sửa 4 bảng auth.
 - `snapshot` jsonb: lưu title/poster/year để hiển thị watchlist nhanh không cần gọi TMDB từng item
 - `MOOD_LOG`: track mood -> click-through cho analytics (improve mappings sau)
 
