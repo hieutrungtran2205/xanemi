@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   try {
     const data = await searchMovies(q, 1)
     return NextResponse.json({
-      results: data.results.slice(0, 5),
+      results: data.results.slice(0, 10),
       total_results: data.total_results,
     })
   } catch {

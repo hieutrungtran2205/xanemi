@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { WatchlistCard } from '@/components/movie/watchlist-card'
 
 export const metadata: Metadata = {
-  title: 'Your Watchlist',
+  title: 'My Watchlist',
 }
 
 export default async function WatchlistPage() {

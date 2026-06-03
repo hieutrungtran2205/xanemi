@@ -14,7 +14,7 @@ type NavItem = { kind: 'movie'; movie: Movie } | { kind: 'more' }
 
 const MIN_QUERY = 2
 const DEBOUNCE_MS = 500
-const MAX_PREVIEW = 5
+const MAX_PREVIEW = 10
 
 export function SearchBar() {
   const router = useRouter()
@@ -33,6 +33,7 @@ export function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null)
   const mobileInputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLFormElement>(null)
+  const mobileOverlayRef = useRef<HTMLDivElement>(null)
 
   if (urlQ !== prevUrlQ) {
     setPrevUrlQ(urlQ)
@@ -76,10 +77,13 @@ export function SearchBar() {
 
   useEffect(() => {
     function onMouseDown(e: MouseEvent) {
-      if (!containerRef.current?.contains(e.target as Node)) {
-        setIsOpen(false)
-        setFocused(false)
-      }
+      const target = e.target as Node
+      if (
+        containerRef.current?.contains(target) ||
+        mobileOverlayRef.current?.contains(target)
+      ) return
+      setIsOpen(false)
+      setFocused(false)
     }
     document.addEventListener('mousedown', onMouseDown)
     return () => document.removeEventListener('mousedown', onMouseDown)
@@ -154,7 +158,8 @@ export function SearchBar() {
   const showDropdown = isOpen && trimmedQ.length > 0
   const extra = totalResults - results.length
 
-  const dropdownContent = (
+  // scrollable list only — "See more" is rendered outside this, pinned to bottom
+  const listContent = (
     <>
       {trimmedQ.length < MIN_QUERY ? (
         <p className="px-3 py-3 text-xs text-muted-foreground">
@@ -206,24 +211,25 @@ export function SearchBar() {
               </li>
             )
           })}
-          {extra > 0 && (
-            <li role="option" aria-selected={highlightedIndex === results.length}>
-              <button
-                type="button"
-                onClick={goToDiscover}
-                onMouseEnter={() => setHighlightedIndex(results.length)}
-                className={`flex w-full items-center justify-center px-3 py-2 text-xs font-medium text-foreground transition-colors ${
-                  highlightedIndex === results.length ? 'bg-muted' : 'hover:bg-muted/50'
-                }`}
-              >
-                See {extra}+ more results
-              </button>
-            </li>
-          )}
         </ul>
       )}
     </>
   )
+
+  const seeMoreButton = extra > 0 ? (
+    <button
+      type="button"
+      role="option"
+      aria-selected={highlightedIndex === results.length}
+      onClick={goToDiscover}
+      onMouseEnter={() => setHighlightedIndex(results.length)}
+      className={`flex w-full items-center justify-center border-t border-border px-3 py-2.5 text-xs font-medium text-foreground transition-colors ${
+        highlightedIndex === results.length ? 'bg-muted' : 'hover:bg-muted/50'
+      }`}
+    >
+      See {extra}+ more results
+    </button>
+  ) : null
 
   return (
     <>
@@ -243,7 +249,7 @@ export function SearchBar() {
 
       {/* Mobile: expanded search overlay */}
       {mobileExpanded && (
-        <div className="fixed inset-x-0 top-0 z-60 border-b border-border bg-background sm:hidden">
+        <div ref={mobileOverlayRef} className="fixed inset-x-0 top-0 z-60 border-b border-border bg-background sm:hidden">
           <form
             onSubmit={handleSubmit}
             className="relative flex items-center gap-2 px-3 py-2"
@@ -291,9 +297,10 @@ export function SearchBar() {
               <div
                 id="search-results-mobile"
                 role="listbox"
-                className="absolute inset-x-0 top-full z-50 overflow-hidden border-b border-border bg-surface shadow-lg"
+                className="absolute inset-x-0 top-full z-50 border-b border-border bg-surface shadow-lg"
               >
-                {dropdownContent}
+                <div className="max-h-[70vh] overflow-y-auto">{listContent}</div>
+                {seeMoreButton}
               </div>
             )}
           </form>
@@ -341,7 +348,8 @@ export function SearchBar() {
             role="listbox"
             className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-md border border-border bg-surface shadow-lg"
           >
-            {dropdownContent}
+            <div className="max-h-[min(480px,70vh)] overflow-y-auto">{listContent}</div>
+            {seeMoreButton}
           </div>
         )}
       </form>
