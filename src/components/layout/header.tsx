@@ -5,7 +5,6 @@ import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
 import { Container } from "./container";
 import { UserMenu } from "./user-menu";
-import { MobileNav } from "./mobile-nav";
 
 export async function Header() {
   const session = await auth();
@@ -38,7 +37,6 @@ export async function Header() {
           </Link>
           <UserMenu user={user} />
         </nav>
-        <MobileNav user={user} />
       </Container>
     </header>
   );

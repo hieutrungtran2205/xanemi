@@ -59,6 +59,15 @@ export function logoUrl(
   return `${IMAGE_BASE}/${size}${path}`
 }
 
+const COUNTRY_SHORT: Record<string, string> = {
+  US: 'USA',
+  GB: 'UK',
+}
+
+export function formatCountryName(country: { iso_3166_1: string; name: string }): string {
+  return COUNTRY_SHORT[country.iso_3166_1] ?? country.name
+}
+
 export function formatRating(voteAverage: number): string {
   if (!voteAverage || isNaN(voteAverage)) return '—'
   return voteAverage.toFixed(1)

@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import "./globals.css";
 
@@ -37,6 +38,9 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          {/* spacer so footer content clears the fixed bottom nav on mobile */}
+          <div className="h-16 sm:hidden" aria-hidden />
+          <BottomNav />
         </NuqsAdapter>
       </body>
     </html>

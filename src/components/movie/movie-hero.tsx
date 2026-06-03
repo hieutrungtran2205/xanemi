@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Play } from "lucide-react";
-import { backdropUrl, formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils";
+import { backdropUrl, formatCountryName, formatRating, posterUrl, releaseYear } from "@/lib/tmdb/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -84,7 +84,7 @@ export function MovieHero({ movie, action }: Props) {
                 {movie.production_countries.length > 0 && (
                   <>
                     <span aria-hidden>·</span>
-                    <span>{movie.production_countries.map((c) => c.name).join(', ')}</span>
+                    <span>{movie.production_countries.map((c) => formatCountryName(c)).join(', ')}</span>
                   </>
                 )}
                 <span aria-hidden>·</span>
@@ -133,11 +133,6 @@ export function MovieHero({ movie, action }: Props) {
                 </div>
               )}
 
-              {movie.production_companies.length > 0 && (
-                <p className="text-xs text-muted-foreground/60">
-                  {movie.production_companies.map((c) => c.name).join(' · ')}
-                </p>
-              )}
             </div>
           </div>
         </div>
