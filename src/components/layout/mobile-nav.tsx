@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { LogOut, Menu } from 'lucide-react'
+import { Bookmark, LogOut, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -51,6 +51,17 @@ export function MobileNav({ user }: { user?: SessionUser }) {
               </Link>
             </SheetClose>
           ))}
+          {user ? (
+            <SheetClose asChild>
+              <Link
+                href="/watchlist"
+                className="flex items-center gap-2 rounded-md px-3 py-3.5 text-base font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+              >
+                <Bookmark size={18} />
+                Watchlist
+              </Link>
+            </SheetClose>
+          ) : null}
         </nav>
 
         <div className="mt-auto border-t border-border px-6 py-6">

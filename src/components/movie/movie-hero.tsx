@@ -8,6 +8,8 @@ import type { MovieDetail } from "@/lib/tmdb/types";
 
 interface Props {
   movie: MovieDetail;
+  /** Slot rendered next to the "Watch Now" button (e.g. watchlist toggle) */
+  action?: React.ReactNode;
 }
 
 function formatRuntime(minutes: number | null): string {
@@ -17,7 +19,7 @@ function formatRuntime(minutes: number | null): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
-export function MovieHero({ movie }: Props) {
+export function MovieHero({ movie, action }: Props) {
   const backdrop = backdropUrl(movie.backdrop_path, "original");
   const poster = posterUrl(movie.poster_path, "w500");
   const year = releaseYear(movie.release_date);
@@ -99,17 +101,22 @@ export function MovieHero({ movie }: Props) {
                 </p>
               )}
 
-              {movie.imdb_id && (
-                <Button asChild size="lg" className="w-fit">
-                  <a
-                    href={`https://www.playimdb.com/title/${movie.imdb_id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Play />
-                    Watch Now
-                  </a>
-                </Button>
+              {(movie.imdb_id || action) && (
+                <div className="flex flex-wrap items-center gap-3">
+                  {movie.imdb_id && (
+                    <Button asChild size="lg" className="w-fit">
+                      <a
+                        href={`https://www.playimdb.com/title/${movie.imdb_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Play />
+                        Watch Now
+                      </a>
+                    </Button>
+                  )}
+                  {action}
+                </div>
               )}
 
               {movie.genres.length > 0 && (

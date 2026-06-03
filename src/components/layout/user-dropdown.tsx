@@ -1,6 +1,7 @@
 'use client'
 
-import { LogOut } from 'lucide-react'
+import Link from 'next/link'
+import { Bookmark, LogOut } from 'lucide-react'
 import { signOutAction } from '@/lib/auth-actions'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -46,6 +47,13 @@ export function UserDropdown({ user }: { user: SessionUser }) {
             </span>
           ) : null}
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/watchlist" className="cursor-pointer">
+            <Bookmark />
+            My Watchlist
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={signOutAction}>
           <DropdownMenuItem asChild>

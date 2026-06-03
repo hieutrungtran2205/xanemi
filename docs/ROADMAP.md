@@ -151,9 +151,9 @@
 - [x] Slice 3.1: Neon DB + Drizzle setup → xem **Auth/Login (hoàn thành)** ✅
 - [x] Slice 3.2: Drizzle schema (auth tables) — Watchlist/Watched/MoodLog defer sang 3.5+
 - [x] Slice 3.3: Auth.js v5 + Google OAuth ✅
-- [ ] Slice 3.4: Protected routes middleware (`proxy.ts`) + login gating — gộp vào slice Watchlist
-- [ ] Slice 3.5: Watchlist API + button trên detail
-- [ ] Slice 3.6: /watchlist page + empty state
+- [x] Slice 3.4: Protected routes (`proxy.ts` edge cookie-gate + `(user)/layout.tsx` guard) + trang `/login` — xem **ADR-021** ✅
+- [x] Slice 3.5: Watchlist table + server actions + `WatchlistButton` trên detail ✅
+- [x] Slice 3.6: `/watchlist` page (grid + remove optimistic + empty state) ✅
 - [ ] Slice 3.7: Watched + rating + /watched page
 - [ ] Slice 3.8: Movie card bookmark indicator + optimistic updates
 - [ ] Slice 3.9: Mood log tracking (anonymous + auth)
@@ -220,7 +220,7 @@ Header search bar mở rộng từ submit-only thành autocomplete dropdown — 
 **Hidden behaviors / cần biết**:
 - `auth()` trong root Header → **toàn site dynamic** (mất static cache, TMDB data cache vẫn chạy). Liên quan SEO Week 2.
 - Google app đang **Testing** nhưng non-sensitive scope → Gmail bất kỳ vẫn login được dù chưa publish (không document chính thức). Publish khi muốn ổn định — không cần Google verification.
-- Chưa có: `proxy.ts`/protected routes, watchlist/watched tables + UI, trang `/login` (đang redirect Google trực tiếp).
+- ✅ Đã có (ADR-021): `proxy.ts` + `(user)/layout.tsx` gating, trang `/login`, bảng `watchlist` + UI. Chưa có: `watched` table + UI, mood log.
 
 ## Week 4+: Post-MVP ⬜
 

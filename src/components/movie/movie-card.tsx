@@ -4,8 +4,15 @@ import { formatRating, posterUrl, releaseYear, toSlug } from "@/lib/tmdb/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Movie } from "@/lib/tmdb/types";
 
+// Only the fields this card actually renders — lets watchlist snapshots
+// (not full Movie objects) be passed in too.
+type MovieCardData = Pick<
+  Movie,
+  "id" | "title" | "poster_path" | "release_date" | "vote_average"
+>;
+
 interface Props {
-  movie: Movie;
+  movie: MovieCardData;
   priority?: boolean;
 }
 

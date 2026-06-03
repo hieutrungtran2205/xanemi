@@ -4,7 +4,10 @@ import {
   integer,
   timestamp,
   primaryKey,
+  jsonb,
+  unique,
 } from 'drizzle-orm/pg-core'
+import type { MovieSnapshot } from '@/lib/watchlist/types'
 
 // Auth.js (NextAuth v5) standard Postgres schema.
 // Shape is dictated by @auth/drizzle-adapter — column names must match exactly.
@@ -56,4 +59,21 @@ export const verificationTokens = pgTable(
     expires: timestamp('expires', { mode: 'date' }).notNull(),
   },
   (vt) => [primaryKey({ columns: [vt.identifier, vt.token] })],
+)
+
+// User-owned movie watchlist. snapshot lets /watchlist render without TMDB calls.
+export const watchlist = pgTable(
+  'watchlist',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    tmdbId: integer('tmdbId').notNull(),
+    snapshot: jsonb('snapshot').$type<MovieSnapshot>().notNull(),
+    addedAt: timestamp('addedAt', { mode: 'date' }).notNull().defaultNow(),
+  },
+  (t) => [unique('watchlist_user_movie_unq').on(t.userId, t.tmdbId)],
 )

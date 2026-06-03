@@ -252,6 +252,24 @@ Option 1. tmdbList<T>(path, params, options?) lives in lib/tmdb/endpoints.ts. li
 - App ở **Testing** + chỉ xài **non-sensitive scopes** (`openid email profile`, mặc định) → Gmail bất kỳ vẫn login được dù không nằm trong Test users (Google không siết gate cho basic scopes). Counter "OAuth user cap (… other)" chỉ áp cho sensitive scopes. Hành vi này **không được document chính thức** → vẫn nên **Publish app** (Testing → In production) cho ổn định. Publish basic-scope **không cần Google verification**.
 - Redirect URI phải khai trong OAuth client (Web application type). Giữ **đồng thời** local + production (chỉ add, không đè): `http://localhost:3000/api/auth/callback/google` + `https://xanemi.vercel.app/api/auth/callback/google`. Format cố định `{origin}/api/auth/callback/google` do Auth.js định nghĩa.
 
+### ADR-021: Watchlist — protected routes (2-layer gating) + `/login` page
+
+**Context**: Slice watchlist (gộp 3.4+3.5+3.6) cần chặn route private và lưu dữ liệu user. Database session strategy (ADR-020) → không validate session ở edge rẻ được.
+
+**Decision**:
+- **Gating 2 lớp**:
+  - `src/proxy.ts` (Next 16, tên export `proxy` + `config.matcher`) — gate UX ở edge, **chỉ check tồn tại session cookie** (`authjs.session-token` / `__Secure-authjs.session-token`), KHÔNG import `@/auth`/adapter. Thiếu → redirect `/login?callbackUrl=<path>`.
+  - `src/app/(user)/layout.tsx` — **nguồn chân lý**: `await auth()` validate session thật với DB, không có → redirect `/login`. Mọi route private nằm trong group `(user)`.
+- **Có trang `/login`** (`src/app/login/page.tsx`) — **thay phần "Không có trang /login" của ADR-020**. Server Component đọc `?callbackUrl`, sanitize (chỉ nhận path relative, chặn open-redirect), form gọi `signInWithGoogleTo` (bind `redirectTo` qua `.bind(null, cb)`). Header/mobile-nav vẫn dùng `signInWithGoogle()` cũ (về trang hiện tại).
+- **Bảng `watchlist`** — `id`/`userId`(FK cascade)/`tmdbId`/`snapshot` jsonb/`addedAt`, unique `(userId, tmdbId)`. `snapshot` = `{ title, posterPath, releaseDate, voteAverage }` (đúng field MovieCard cần) → render `/watchlist` không gọi lại TMDB. Tạo bằng `db:push`.
+- **Server actions** `src/lib/watchlist/actions.ts` (`addToWatchlist`/`removeFromWatchlist`, guard `session.user.id`, add dùng `onConflictDoNothing`, `revalidatePath('/watchlist')`). Queries `src/lib/watchlist/queries.ts` (`server-only`).
+- **UI**: `WatchlistButton` (detail hero, optimistic `useTransition`; chưa login → link `/login?callbackUrl`); `WatchlistCard` (trang /watchlist, MovieCard + nút remove overlay optimistic). `MovieCard` prop narrow xuống `Pick<Movie, ...>` để nhận data dựng từ snapshot. Link "Watchlist" trong user-dropdown + mobile-nav (khi logged in).
+- `src/types/next-auth.d.ts` — augment `Session['user'].id` để dùng không cần `as`/`any`.
+
+**Consequences**:
+- proxy chỉ là gate UX (check cookie tồn tại, không verify chữ ký) → bảo mật thật nằm ở `(user)/layout.tsx` + guard trong server actions. Cố tình giả cookie chỉ qua được proxy, vẫn bị layout chặn.
+- Watchlist data = no-store (dynamic), không cache.
+
 ## Data Model (implement Week 3)
 
 Movie-only, không có `mediaType` field.

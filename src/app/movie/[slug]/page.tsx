@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { auth } from "@/auth";
 import {
   getMovieDetail,
   getMovieCredits,
@@ -6,7 +7,9 @@ import {
   getMovieSimilar,
 } from "@/lib/tmdb/endpoints";
 import { parseSlug } from "@/lib/tmdb/utils";
+import { isInWatchlist } from "@/lib/watchlist/queries";
 import { MovieHero } from "@/components/movie/movie-hero";
+import { WatchlistButton } from "@/components/movie/watchlist-button";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { TrailerEmbed } from "@/components/player/trailer-embed";
 import { PageShell } from "@/components/layout/page-shell";
@@ -24,11 +27,15 @@ export default async function MoviePage({ params }: PageProps) {
   if (!parsed) notFound();
   const { tmdbId } = parsed;
 
-  const [movie, credits, videos, similar] = await Promise.all([
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const [movie, credits, videos, similar, inWatchlist] = await Promise.all([
     getMovieDetail(tmdbId).catch(() => null),
     getMovieCredits(tmdbId).catch(() => null),
     getMovieVideos(tmdbId).catch(() => null),
     getMovieSimilar(tmdbId).catch(() => null),
+    userId ? isInWatchlist(userId, tmdbId).catch(() => false) : Promise.resolve(false),
   ]);
 
   if (!movie) notFound();
@@ -45,7 +52,23 @@ export default async function MoviePage({ params }: PageProps) {
 
   return (
     <PageShell>
-      <MovieHero movie={movie} />
+      <MovieHero
+        movie={movie}
+        action={
+          <WatchlistButton
+            tmdbId={tmdbId}
+            snapshot={{
+              title: movie.title,
+              posterPath: movie.poster_path,
+              releaseDate: movie.release_date,
+              voteAverage: movie.vote_average,
+            }}
+            initialInWatchlist={inWatchlist}
+            isAuthed={Boolean(userId)}
+            movieSlug={slug}
+          />
+        }
+      />
 
       <Container className="py-8">
         {movie.overview && (
