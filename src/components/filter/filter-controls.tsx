@@ -2,7 +2,7 @@
 
 import {
   SORT_OPTIONS,
-  LANGUAGE_OPTIONS,
+  COUNTRY_OPTIONS,
   YEAR_MIN,
   CURRENT_YEAR,
   type FilterParams,
@@ -105,6 +105,29 @@ export function FilterControls({ genres, local, setLocal }: FilterControlsProps)
 
       <section className="py-4">
         <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          Country
+        </h3>
+        <Select
+          value={local.country}
+          onValueChange={(v) =>
+            setLocal((p) => ({ ...p, country: v as FilterParams['country'] }))
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent position="popper" side="top">
+            {COUNTRY_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>
+                {o.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </section>
+
+      <section className="py-4">
+        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Sort By
         </h3>
         <Select
@@ -116,31 +139,8 @@ export function FilterControls({ genres, local, setLocal }: FilterControlsProps)
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper" side="top">
             {SORT_OPTIONS.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
-                {o.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </section>
-
-      <section className="py-4">
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Language
-        </h3>
-        <Select
-          value={local.lang}
-          onValueChange={(v) =>
-            setLocal((p) => ({ ...p, lang: v as FilterParams['lang'] }))
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {LANGUAGE_OPTIONS.map((o) => (
               <SelectItem key={o.value} value={o.value}>
                 {o.label}
               </SelectItem>
@@ -172,7 +172,7 @@ function YearSelect({
       <SelectTrigger className="flex-1">
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent position="popper" side="top">
         {years.map((y) => (
           <SelectItem key={y} value={String(y)}>
             {y}

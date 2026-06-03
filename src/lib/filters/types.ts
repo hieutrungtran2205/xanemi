@@ -1,5 +1,5 @@
 export type SortOption = 'popularity' | 'rating' | 'release_desc' | 'release_asc'
-export type LanguageCode = 'any' | 'en' | 'ko' | 'ja' | 'fr' | 'es' | 'vi' | 'zh' | 'hi'
+export type CountryCode = 'any' | 'US' | 'GB' | 'KR' | 'JP' | 'FR' | 'ES' | 'IN' | 'CN' | 'IT' | 'DE'
 
 export const CURRENT_YEAR = new Date().getFullYear()
 export const YEAR_MIN = 1970
@@ -10,7 +10,7 @@ export interface FilterParams {
   yearTo: number
   minRating: number
   sort: SortOption
-  lang: LanguageCode
+  country: CountryCode
 }
 
 export const DEFAULT_FILTERS: FilterParams = {
@@ -19,7 +19,7 @@ export const DEFAULT_FILTERS: FilterParams = {
   yearTo: CURRENT_YEAR,
   minRating: 0,
   sort: 'popularity',
-  lang: 'any',
+  country: 'any',
 }
 
 export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -29,16 +29,18 @@ export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'release_asc', label: 'Oldest First' },
 ]
 
-export const LANGUAGE_OPTIONS: { value: LanguageCode; label: string }[] = [
-  { value: 'any', label: 'Any Language' },
-  { value: 'en', label: 'English' },
-  { value: 'ko', label: 'Korean' },
-  { value: 'ja', label: 'Japanese' },
-  { value: 'fr', label: 'French' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'vi', label: 'Vietnamese' },
-  { value: 'zh', label: 'Chinese' },
-  { value: 'hi', label: 'Hindi' },
+export const COUNTRY_OPTIONS: { value: CountryCode; label: string }[] = [
+  { value: 'any', label: 'Any Country' },
+  { value: 'US', label: 'USA' },
+  { value: 'GB', label: 'UK' },
+  { value: 'KR', label: 'South Korea' },
+  { value: 'JP', label: 'Japan' },
+  { value: 'FR', label: 'France' },
+  { value: 'ES', label: 'Spain' },
+  { value: 'IN', label: 'India' },
+  { value: 'CN', label: 'China' },
+  { value: 'IT', label: 'Italy' },
+  { value: 'DE', label: 'Germany' },
 ]
 
 export function countActiveFilters(f: FilterParams): number {
@@ -47,6 +49,6 @@ export function countActiveFilters(f: FilterParams): number {
   if (f.yearFrom !== YEAR_MIN || f.yearTo !== CURRENT_YEAR) n++
   if (f.minRating > 0) n++
   if (f.sort !== 'popularity') n++
-  if (f.lang !== 'any') n++
+  if (f.country !== 'any') n++
   return n
 }

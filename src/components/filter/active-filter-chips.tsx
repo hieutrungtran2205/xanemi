@@ -8,7 +8,7 @@ import { filterParsers } from '@/lib/filters/parsers'
 import {
   DEFAULT_FILTERS,
   SORT_OPTIONS,
-  LANGUAGE_OPTIONS,
+  COUNTRY_OPTIONS,
   YEAR_MIN,
   CURRENT_YEAR,
 } from '@/lib/filters/types'
@@ -64,12 +64,12 @@ export function ActiveFilterChips({ genres }: Props) {
     })
   }
 
-  if (filters.lang !== 'any') {
-    const label = LANGUAGE_OPTIONS.find((o) => o.value === filters.lang)?.label ?? ''
+  if (filters.country !== 'any') {
+    const label = COUNTRY_OPTIONS.find((o) => o.value === filters.country)?.label ?? ''
     chips.push({
-      key: 'lang',
+      key: 'country',
       label,
-      onRemove: () => { setFilters({ lang: 'any' }); setPage(null, { shallow: false }) },
+      onRemove: () => { setFilters({ country: 'any' }); setPage(null, { shallow: false }) },
     })
   }
 

@@ -21,7 +21,7 @@ export function buildDiscoverQuery(filters: FilterParams, page: number): Record<
     params['vote_average.gte'] = String(filters.minRating)
     params['vote_count.gte'] = '100'
   }
-  if (filters.lang !== 'any') params.with_original_language = filters.lang
+  if (filters.country !== 'any') params.with_origin_country = filters.country
   return params
 }
 
@@ -34,7 +34,7 @@ export function filtersToUrlParams(filters: FilterParams, q?: string): string {
   if (filters.yearTo !== CURRENT_YEAR) params.set('yearTo', String(filters.yearTo))
   if (filters.minRating > 0) params.set('minRating', String(filters.minRating))
   if (filters.sort !== 'popularity') params.set('sort', filters.sort)
-  if (filters.lang !== 'any') params.set('lang', filters.lang)
+  if (filters.country !== 'any') params.set('country', filters.country)
   const qs = params.toString()
   return qs ? `?${qs}` : ''
 }
@@ -93,9 +93,9 @@ export function buildQueryWithFilters(
     params['with_runtime.lte'] = String(mood.query.with_runtime_lte)
   }
 
-  // Language
-  if (filters.lang !== 'any') {
-    params.with_original_language = filters.lang
+  // Country of origin
+  if (filters.country !== 'any') {
+    params.with_origin_country = filters.country
   }
 
   return params
