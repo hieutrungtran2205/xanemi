@@ -1,16 +1,7 @@
-import Link from "next/link";
 import { Logo } from "./logo";
 import { Container } from "./container";
 
-const EXPLORE_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/discover", label: "Browse" },
-  { href: "/trending", label: "Trending" },
-];
-
 export function Footer() {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="mt-auto border-t border-border bg-background">
       <Container className="py-14">
@@ -19,7 +10,7 @@ export function Footer() {
           <div className="max-w-sm">
             <Logo />
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Discover and explore films you&apos;ll love
+              The cinema, in your room
             </p>
           </div>
 

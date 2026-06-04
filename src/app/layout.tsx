@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { RegisterSW } from "@/components/layout/register-sw";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "Xanemi",
-  description: "Your go-to place to discover and explore films.",
+  description: "The cinema, in your room",
 };
 
 export default function RootLayout({
@@ -34,6 +35,7 @@ export default function RootLayout({
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
         <NuqsAdapter>
+          <RegisterSW />
           <ScrollToTop />
           <Header />
           {children}
