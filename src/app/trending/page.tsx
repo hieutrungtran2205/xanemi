@@ -27,10 +27,10 @@ export default async function TrendingPage({ searchParams }: PageProps) {
         title="What's Hot Right Now"
         description="The movies everyone's watching — updated daily."
       >
-        <div className="flex gap-1 rounded-md border border-border bg-surface/60 p-1">
+        <div className="relative z-10 flex w-full gap-1 rounded-md border border-border bg-surface/60 p-1 sm:w-auto">
           <Link
             href="/trending"
-            className={`rounded px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
+            className={`flex-1 whitespace-nowrap rounded px-3 py-2 text-center text-sm font-medium transition-colors duration-200 sm:flex-initial sm:py-1.5 ${
               timeWindow === 'day'
                 ? 'bg-surface-2 text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
@@ -40,7 +40,7 @@ export default async function TrendingPage({ searchParams }: PageProps) {
           </Link>
           <Link
             href="/trending?period=week"
-            className={`rounded px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
+            className={`flex-1 whitespace-nowrap rounded px-3 py-2 text-center text-sm font-medium transition-colors duration-200 sm:flex-initial sm:py-1.5 ${
               timeWindow === 'week'
                 ? 'bg-surface-2 text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
