@@ -1,6 +1,6 @@
-# Moodflix — Claude Code Instructions
+# Xanemi — Claude Code Instructions
 
-> Bạn đang work trên **Moodflix**, một movie discovery platform giúp user tìm phim theo **mood/cảm xúc**. Painpoint giải quyết: "không biết xem gì". Project cá nhân, mục tiêu học SEO + Next.js + full-stack pattern. Deploy free trên Vercel.
+> Bạn đang work trên **Xanemi** (tên cũ "Moodflix"), một movie discovery platform giúp user tìm phim qua **nhiều lane khám phá** (trending + theme/genre + country + filter + search). Painpoint giải quyết: "không biết xem gì". **Hướng mood-first ban đầu đã bỏ — xem ADR-024.** Project cá nhân, mục tiêu học SEO + Next.js + full-stack pattern. Deploy free trên Vercel.
 
 ## Cách Làm Việc (QUAN TRỌNG NHẤT)
 
@@ -55,32 +55,38 @@ Project này build theo **feature-by-feature (vertical slices)**, KHÔNG generat
 
 ```
 app/
-  (marketing)/page.tsx       # Landing - mood picker + trending
-  discover/[mood]/page.tsx   # Mood result list + filters
+  (marketing)/page.tsx       # Landing - trending hero slider + trending grid + themes + countries
+  discover/page.tsx          # Browse/filter + search (?q=)
+  theme/[slug]/page.tsx      # Theme lane (genre-first)
+  country/[slug]/page.tsx    # Country lane (cinema-by-origin)
   movie/[slug]/page.tsx      # Movie detail
+  person/[slug]/page.tsx     # Person detail (bio + filmography)
   trending/page.tsx          # Hot now
-  search/page.tsx            # Search (Week 2+)
-  (user)/                    # Protected (Week 3+)
+  login/page.tsx             # Auth
+  (user)/                    # Protected (auth-gated)
     watchlist/
-    watched/
-  api/                       # Route handlers (Week 3+)
-  sitemap.ts                 # Week 2
-  robots.ts                  # Week 2
+  api/                       # Route handlers (auth, search proxy)
+  manifest.ts                # PWA
+  sitemap.ts / robots.ts     # Week 2 (chưa làm)
   layout.tsx
   globals.css
+  discover/[mood]/           # ⚠️ ORPHAN — mood đã bỏ (ADR-024), chờ gỡ
 components/
   ui/                        # shadcn primitives — regenerate via CLI, không sửa tay
-  mood/                      # MoodPicker, MoodChip
-  movie/                     # MovieCard, MovieGrid, MovieHero, etc.
-  filter/                    # Filter sidebar/drawer (Week 2)
+  movie/                     # MovieCard, MovieGrid, MovieHero, ThemeCard, CountryCard, HeroSlider, Pagination...
+  person/                    # PersonHero, PersonCreditCard, BiographyText
+  filter/                    # Filter panel/controls/chips
   player/                    # TrailerEmbed (lite-youtube)
-  layout/                    # Header, Footer, Logo, Breadcrumb
-  seo/                       # JSON-LD
+  layout/                    # Header, Footer, Logo, nav, SearchBar, register-sw...
+  mood/                      # ⚠️ ORPHAN — chờ gỡ (ADR-024)
+  seo/                       # JSON-LD (Week 2)
 lib/
   tmdb/                      # client, types, endpoints, utils
-  moods/                     # definitions, engine, types (CORE differentiator)
-  filters/                   # types, url-state, query-builder (Week 2)
-  db/                        # Drizzle schema + client (Week 3+)
+  themes/ countries/         # discovery lane definitions
+  filters/                   # types, parsers, query-builder
+  watchlist/                 # actions, queries, types
+  db/                        # Drizzle schema + client
+  moods/                     # ⚠️ ORPHAN — chờ gỡ (ADR-024)
   utils.ts                   # cn(), formatters
 ```
 
@@ -101,17 +107,17 @@ Chi tiết đầy đủ (color tokens, typography, spacing, component patterns, 
 ### Tóm tắt nhanh
 - **Dark-only** MVP. Background near-black `#0A0A0B`, surface `#141416`
 - **Typography**: Space Grotesk (heading) + Inter (body) qua next/font
-- **Mood accent**: 10 màu (xem docs/MOODS.md) nhưng CHỈ dùng ở 3 chỗ — mood chip active, discover header, focus ring. KHÔNG dùng tràn lan
+- **Accent**: neutral (shadcn default). KHÔNG accent màu trang trí — chỉ near-black + neutral + semantic (mood accent đã bỏ, xem ADR-024)
 - **Spacing**: generous, breathing room
 - **Effects**: tiết chế. Hover = 1 effect (KHÔNG stack scale+shadow+glow)
-- **Logo**: text wordmark CSS thuần ("moodflix", mood bold + flix thin)
+- **Logo**: text wordmark CSS thuần "Xanemi" (Space Grotesk semibold, chấm chữ "i" cuối = nút play)
 
 ### Anti-patterns (tránh "AI-generated look")
 - KHÔNG glassmorphism / backdrop-blur
 - KHÔNG gradient màu mè (1 subtle dark gradient cho hero overlay OK)
 - KHÔNG hover stack effect — pick 1
 - KHÔNG rounded-full mọi thứ (chỉ avatar)
-- KHÔNG emoji ngoài mood context
+- KHÔNG emoji trong UI
 - KHÔNG copy "stunning/revolutionary/seamless/elevate"
 - KHÔNG neon glow, box-shadow màu
 
@@ -125,7 +131,7 @@ Chi tiết đầy đủ (color tokens, typography, spacing, component patterns, 
 ## When In Doubt
 
 - Đọc `docs/ARCHITECTURE.md` cho deep context + ADRs
-- Đọc `docs/MOODS.md` khi work với mood/filter
+- Đọc `docs/DISCOVERY.md` khi work với discovery lane (theme/country/trending) hoặc filter/search
 - Đọc `docs/DESIGN.md` khi build UI (color, typography, spacing, patterns)
 - Đọc `docs/ROADMAP.md` để biết slice hiện tại
 - HỎI user nếu requirement không rõ

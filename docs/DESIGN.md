@@ -1,6 +1,7 @@
-# Moodflix — Design System
+# Xanemi — Design System
 
-> Style: **Premium minimal** (Mubi/A24 vibe). Dark-only. Content (poster) là ngôi sao, UI lùi về sau. Mood accent dùng tiết chế.
+> Style: **Premium minimal** (Mubi/A24 vibe). Dark-only. Content (poster) là ngôi sao, UI lùi về sau.
+> (Hệ "mood accent" của bản đầu đã bỏ cùng mood — xem ADR-024. Accent giờ dùng neutral của shadcn.)
 
 ## Design Philosophy
 
@@ -8,7 +9,7 @@
 2. **Breathing room**: spacing rộng rãi, không chật chội.
 3. **Typography-led**: chữ làm chủ đạo, không decoration thừa.
 4. **Restraint**: ít màu, ít effect. Khi phân vân → bớt đi, không thêm vào.
-5. **Mood accent = gia vị**: màu mood chỉ điểm xuyết, không phải món chính.
+5. **Monochrome-led**: gần như chỉ near-black + trắng/xám. Màu chỉ cho semantic (rating gold, error) — không accent trang trí.
 
 ## Reference Sites
 - **Letterboxd**: layout grid, detail page structure, dark balance
@@ -29,32 +30,14 @@ Khi build component, tham khảo vibe 2 site này.
 --text-subtle:   #71717A   /* tertiary, disabled */
 ```
 
-### Mood Accents (dùng TIẾT CHẾ — xem rules dưới)
+### Accent (neutral — shadcn default)
 ```
-cozy          #F59E0B   amber
-mind-bending  #06B6D4   cyan
-edge-of-seat  #EF4444   red
-laugh         #FACC15   yellow
-good-cry      #EC4899   pink
-escape        #A855F7   purple
-date-night    #F43F5E   rose
-adrenaline    #F97316   orange
-dark-gritty   #991B1B   deep red
-curious       #10B981   green
+--accent:            #1C1C1F   /* = surface-2, dùng cho hover/active nhẹ */
+--accent-foreground: #FAFAFA
 ```
+> Bản đầu có 10 "mood accent" màu (amber/cyan/red...) gắn với 10 mood. Mood đã bỏ (ADR-024) và các token màu đó **chưa từng được implement** trong `globals.css`. Giữ near-black + neutral; KHÔNG thêm accent màu trang trí.
 
-### Accent dùng Ở ĐÂU (chỉ 3 chỗ)
-1. Mood chip hover/active state
-2. Discover page header (1 đường line/subtle glow theo mood)
-3. Focus ring (keyboard navigation)
-
-### Accent KHÔNG dùng ở
-- Background toàn trang (giữ near-black)
-- Body text
-- Mọi button khác ngoài mood
-- Borders chung
-
-### Semantic
+### Semantic (dùng duy nhất cho ý nghĩa, không trang trí)
 ```
 --rating-gold:   #FACC15   /* star rating */
 --success:       #22C55E
@@ -163,14 +146,16 @@ Implementation: `components/layout/logo.tsx`. KHÔNG dùng image/raster logo tro
 - Loading: skeleton với surface-2 pulse
 ```
 
-### MoodChip
+### Theme / Country Card (discovery lanes)
 ```
-- Layout: emoji (lớn) + label (text-base, 600) + subtitle (text-sm, muted)
-- Idle: bg-surface, border-border
-- Hover: bg-surface-2, border chuyển mood accent (subtle)
-- Active: border mood accent rõ + accent text
-- rounded-md, p-4
+- Component: components/movie/theme-card.tsx + country-card.tsx (+ skeleton)
+- Card backdrop phim (poster mosaic / backdrop) + title + description ngắn
+- Render ở landing: "What to Watch?" (themes) + "Cinema by Country" (countries)
+- Grid: 1 col (mobile) / 2 (sm) / 3 (lg). Hover: 1 effect (scale HOẶC ring), không stack
+- Click → /theme/[slug] hoặc /country/[slug]
 ```
+
+> ~~MoodChip~~ (emoji + label + mood accent) đã bỏ cùng mood — ADR-024.
 
 ### Hero Slider (Landing)
 
@@ -224,7 +209,7 @@ Breadcrumb (tĩnh, theo URL hierarchy):
 - text-sm, text-muted
 - Separator: "/" hoặc chevron nhỏ (text-subtle)
 - Last item (current page): text-text (không link)
-- Discover: Home > [Mood Label]
+- Theme: Home > [Theme Title]    ·    Country: Home > [Country Title]
 - Movie detail: Home > [Title]   (bỏ segment "Movies")
 - Trending: Home > Trending
 - KHÔNG ở landing page
@@ -249,7 +234,7 @@ Back button:
 
 ```
 Movie grid:   2 cols (mobile) / 3 (sm) / 4 (md) / 5 (lg)
-Mood picker:  2 cols (mobile) / 3 (sm) / 5 (lg)
+Theme/Country cards: 1 col (mobile) / 2 (sm) / 3 (lg)
 Detail hero:  stack (mobile) / side-by-side (md+)
 Filter:       bottom drawer (mobile) / sidebar (lg)
 ```
@@ -261,7 +246,7 @@ KHÔNG làm những điều sau:
 - ❌ Glassmorphism, backdrop-blur
 - ❌ Hover stack: scale + shadow + glow cùng lúc → pick 1
 - ❌ rounded-full mọi thứ (chỉ avatar)
-- ❌ Emoji ngoài mood context
+- ❌ Emoji trong UI (không còn mood context để cho phép)
 - ❌ Copy "stunning/revolutionary/seamless/elevate/unleash"
 - ❌ Neon glow, box-shadow màu
 - ❌ Quá nhiều accent color trên 1 màn hình
@@ -274,7 +259,7 @@ Mỗi khi Claude generate UI, check:
 - [ ] Nền vẫn near-black, không gradient lạ?
 - [ ] Spacing đủ rộng (breathing room)?
 - [ ] Chỉ 1 hover effect, không stack?
-- [ ] Mood accent chỉ ở chip/ring/header?
+- [ ] Không có accent màu trang trí (chỉ near-black + neutral + semantic)?
 - [ ] Poster nổi bật, UI lùi sau?
 - [ ] Có giống vibe Letterboxd/Mubi không?
 - [ ] Typography rõ ràng, Space Grotesk heading + Inter body?
