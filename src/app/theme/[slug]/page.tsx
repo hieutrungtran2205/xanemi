@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const theme = THEMES.find((t) => t.slug === slug)
   if (!theme) return { title: 'Not Found' }
   return {
-    title: `${theme.title} — Moodflix`,
+    title: `${theme.title} — Xanemi`,
     description: theme.description,
   }
 }

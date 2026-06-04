@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const country = COUNTRIES.find((c) => c.slug === slug)
   if (!country) return { title: 'Not Found' }
   return {
-    title: `${country.title} — Moodflix`,
+    title: `${country.title} — Xanemi`,
     description: country.description,
   }
 }
